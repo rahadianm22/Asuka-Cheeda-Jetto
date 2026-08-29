@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Suaka Station — Asuka Jetto</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..800;1,62..125,400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --chassis:#17111F;
+  --screen:#0C0812;
+  --chassis-2:#1F1729;
+  --paper:#EDE6EC;
+  --paper-2:#DED2DE;
+  --ink:#191221;
+  --lav:#C1A1CF;
+  --lav-hi:#DCC4E6;
+  --pulse:#7BE0B4;
+  --amber:#E8B04B;
+  --line:rgba(193,161,207,.20);
+  --line-2:rgba(193,161,207,.10);
+  --mut:#8E7E9B;
+
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --sans:"Archivo",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--screen);
+  color:var(--paper);
+  font-family:var(--sans);
+  font-variation-settings:"wdth" 100;
+  line-height:1.5;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(120% 70% at 50% -10%, rgba(193,161,207,.13), transparent 60%),
+    repeating-linear-gradient(to bottom, rgba(255,255,255,.017) 0 1px, transparent 1px 3px);
+}
+.wrap{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:0 20px 80px}
+
+/* ---------- utility type ---------- */
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.mut{color:var(--mut)}
+
+/* ---------- instrument bar ---------- */
+.bar{
+  position:sticky;top:0;z-index:60;
+  display:flex;align-items:center;gap:18px;
+  padding:11px 20px;
+  background:rgba(12,8,18,.82);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line-2);
+}
+.bar .brand{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.22em;color:var(--lav-hi)}
+.bar .spacer{flex:1}
+.relay{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--mut)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--pulse);box-shadow:0 0 0 3px rgba(123,224,180,.16)}
+
+/* ---------- trace (signature) ---------- */
+.relaybar{padding:30px 0;border-bottom:1px solid var(--line-2)}
+.relaybar-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.relaybar-head h2{
+  font-size:clamp(11px,1.4vw,12px);font-family:var(--mono);font-weight:700;
+  letter-spacing:.26em;color:var(--lav-hi);text-transform:uppercase;
+}
+.relaylinks{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.relaylink{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  border:1px solid var(--line);padding:14px 16px;text-decoration:none;color:var(--paper);
+  transition:.16s;position:relative;overflow:hidden;
+}
+.relaylink:hover{border-color:var(--lav);background:rgba(193,161,207,.06);transform:translateY(-1px)}
+.relaylink .rl-name{font-size:14px;font-weight:600;font-variation-settings:"wdth" 94}
+.relaylink .rl-sub{display:block;margin-top:2px;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--mut);text-transform:uppercase}
+.relaylink .rl-arrow{font-family:var(--mono);color:var(--lav);opacity:0;transform:translateX(-4px);transition:.16s}
+.relaylink:hover .rl-arrow{opacity:1;transform:translateX(0)}
+
+/* ---------- masthead ---------- */
+.mast{display:grid;grid-template-columns:1.55fr 1fr;gap:1px;background:var(--line-2);margin-top:44px;border:1px solid var(--line-2)}
+.mast > *{background:var(--screen);padding:34px 32px}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--mut);margin-bottom:20px;display:flex;gap:10px;align-items:center}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line-2)}
+h1{
+  font-size:clamp(34px,5.4vw,62px);line-height:.98;font-weight:700;
+  font-variation-settings:"wdth" 92;letter-spacing:-.02em;color:var(--paper);
+  text-wrap:balance;
+}
+h1 em{font-style:normal;color:var(--lav)}
+.mast p.sub{margin-top:18px;max-width:44ch;color:#B7A8C0;font-size:15px}
+.cta{
+  display:inline-flex;align-items:center;gap:10px;margin-top:26px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--screen);background:var(--lav);padding:12px 18px;border-radius:2px;
+  text-decoration:none;transition:.18s;
+}
+.cta:hover{background:var(--lav-hi);transform:translateY(-1px)}
+
+/* patient file — chart paper */
+.file{background:var(--paper) !important;color:var(--ink);position:relative}
+.file::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--paper-2) 1px,transparent 1px),linear-gradient(90deg,var(--paper-2) 1px,transparent 1px);
+  background-size:14px 14px;opacity:.5;
+}
+.file > *{position:relative;z-index:1}
+.file .eyebrow{color:#7A6A82}
+.file .eyebrow::after{background:var(--paper-2)}
+.file h3{font-size:24px;font-variation-settings:"wdth" 94;letter-spacing:-.01em;line-height:1.1;margin-bottom:4px}
+.file .binom{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:#7A6A82;text-transform:uppercase;margin-bottom:22px}
+.rows{display:grid;gap:0;border-top:1px solid var(--paper-2)}
+.rows div{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--paper-2);font-size:13.5px}
+.rows dt{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7A6A82;padding-top:2px}
+.rows dd{text-align:right;font-weight:500}
+
+/* ---------- preferences (dark, matches feed chassis) ---------- */
+.vitals{margin-top:1px;background:var(--chassis);color:var(--paper);position:relative;padding:34px 32px 8px;border:1px solid var(--line-2);border-top:none}
+.vitals::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(193,161,207,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(193,161,207,.07) 1px,transparent 1px);
+  background-size:14px 14px;
+}
+.vitals > *{position:relative;z-index:1}
+.vitals .eyebrow{margin-bottom:26px}
+.vgroup + .vgroup{margin-top:30px;padding-top:26px;border-top:1px solid var(--line-2)}
+.vgroup-head{display:flex;align-items:baseline;gap:10px;margin-bottom:16px}
+.vgroup-head .arrow{font-family:var(--mono);font-size:15px;font-weight:700}
+.vgroup.up .arrow{color:var(--pulse)}
+.vgroup.down .arrow{color:var(--amber)}
+.vgroup-head h3{font-size:12px;font-family:var(--mono);font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#C6B7CE}
+.vgroup-head span.count{font-family:var(--mono);font-size:10px;color:var(--mut);letter-spacing:.1em}
+.vpills{display:flex;flex-wrap:wrap;gap:8px;padding-bottom:34px}
+.vpill{
+  border-radius:999px;padding:8px 15px;font-size:12.5px;line-height:1.3;
+  background:transparent;border:1px solid var(--line);color:#C6B7CE;
+}
+.vgroup.up .vpill{border-color:rgba(123,224,180,.32);color:#BFE9D5}
+.vgroup.down .vpill{border-color:rgba(232,176,75,.32);color:#EAD3A6}
+
+/* ---------- chips ---------- */
+.chipbar{
+  position:sticky;top:41px;z-index:50;
+  margin-top:44px;padding:14px 0;
+  background:linear-gradient(var(--screen) 72%,rgba(12,8,18,0));
+}
+.chipbar-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.chipbar-head h2{
+  font-size:clamp(11px,1.4vw,12px);font-family:var(--mono);font-weight:700;
+  letter-spacing:.26em;color:var(--lav-hi);text-transform:uppercase;
+}
+.chiprow{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.chiprow::-webkit-scrollbar{display:none}
+.chiprow + .chiprow{margin-top:8px}
+.chip{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:9px;
+  border:1px solid var(--line);background:transparent;color:#C6B7CE;
+  padding:8px 13px;border-radius:2px;cursor:pointer;
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:lowercase;
+  transition:border-color .16s,color .16s,background .16s;
+}
+.chip .swatch{width:7px;height:7px;border-radius:1px;background:currentColor;opacity:.85}
+.chip .n{font-size:10px;color:var(--mut)}
+.chip:hover:not(:disabled){border-color:var(--lav);color:var(--lav-hi)}
+.chip:disabled{opacity:.32;cursor:not-allowed}
+.chip[aria-pressed="true"]{background:var(--lav);border-color:var(--lav);color:var(--screen)}
+.chip[aria-pressed="true"] .n{color:rgba(12,8,18,.55)}
+
+/* ---------- feed ---------- */
+.feed{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-top:10px}
+.card{
+  grid-column:span 4;border:1px solid var(--line-2);background:var(--chassis);
+  display:flex;flex-direction:column;position:relative;overflow:hidden;
+  transition:border-color .2s,transform .2s;
+  animation:in .5s cubic-bezier(.2,.7,.3,1) backwards;
+}
+.card-link{display:flex;flex-direction:column;flex:1;color:inherit;text-decoration:none;cursor:pointer}
+@keyframes in{from{opacity:0;transform:translateY(10px)}}
+.card:hover{border-color:var(--line);transform:translateY(-2px)}
+.card.w6{grid-column:span 6}
+.card.w8{grid-column:span 8}
+.card .rail{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:9px 13px;border-bottom:1px solid var(--line-2);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);
+}
+.card .rail .src{color:var(--lav);display:flex;align-items:center;gap:6px}
+.plate{position:relative;background:var(--chassis-2);overflow:hidden}
+.plate::before{
+  content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(193,161,207,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(193,161,207,.09) 1px,transparent 1px);
+  background-size:18px 18px;
+}
+.plate::after{
+  content:attr(data-ratio);position:absolute;left:11px;bottom:9px;
+  font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:rgba(193,161,207,.4);
+}
+.plate img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;filter:saturate(.92)}
+.plate iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:4}
+.plate .glow{z-index:2}
+.plate .dur,.plate .play{z-index:3}
+.plate.has-media::after{display:none}
+.plate .play{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:52px;height:52px;border-radius:50%;border:0;cursor:pointer;
+  background:rgba(12,8,18,.7);backdrop-filter:blur(6px);
+  display:grid;place-items:center;transition:.18s;
+}
+.plate .play::before{content:"";border-left:13px solid var(--paper);border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:3px}
+.card:hover .plate .play{background:var(--lav)}
+.card:hover .plate .play::before{border-left-color:var(--screen)}
+.plate.r169{aspect-ratio:16/9}
+.plate.r45{aspect-ratio:4/5}
+.plate.r11{aspect-ratio:1/1}
+.plate .glow{position:absolute;inset:0;background:radial-gradient(70% 90% at 30% 20%,rgba(193,161,207,.22),transparent 70%)}
+.plate .dur{
+  position:absolute;right:9px;bottom:8px;background:rgba(12,8,18,.85);
+  font-family:var(--mono);font-size:10px;letter-spacing:.06em;padding:3px 6px;color:var(--paper);
+}
+.card .body{padding:15px 15px 17px;display:flex;flex-direction:column;gap:9px;flex:1}
+.card h4{font-size:16px;line-height:1.25;font-weight:600;font-variation-settings:"wdth" 96;letter-spacing:-.005em}
+.card .note{font-size:19px;line-height:1.4;font-weight:400;color:var(--paper);font-variation-settings:"wdth" 88}
+.card .meta{margin-top:auto;padding-top:10px;display:flex;gap:12px;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.tagpill{color:var(--lav)}
+.credit{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--mut)}
+.credit b{color:#C6B7CE;font-weight:500}
+
+
+.empty{grid-column:span 12;border:1px dashed var(--line);padding:44px;text-align:center}
+.empty h4{font-size:18px;margin-bottom:8px;font-weight:600}
+.empty p{color:var(--mut);font-size:14px}
+
+/* ---------- footer ---------- */
+footer{margin-top:64px;padding-top:22px;border-top:1px solid var(--line-2);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer p{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);max-width:52ch;line-height:1.8}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  .mast{grid-template-columns:1fr}
+  .card,.card.w6,.card.w8{grid-column:span 6}
+  .relaylinks{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:620px){
+  .wrap{padding:0 14px 60px}
+  .mast > *{padding:26px 20px}
+  .card,.card.w6,.card.w8{grid-column:span 12}
+  .relaylinks{grid-template-columns:1fr 1fr}
+  .chipbar{top:41px}
+}
+:focus-visible{outline:2px solid var(--lav-hi);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important}
+}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="brand">SUAKA&nbsp;STATION</span>
+  <span class="relay"><span class="dot"></span><span>relay tersambung</span></span>
+  <span class="spacer"></span>
+  <span class="relay" id="clock">—</span>
+</div>
+
+<div class="wrap">
+
+  <!-- RELAY LINKS -->
+  <section class="relaybar">
+    <div class="relaybar-head">
+      <h2>Sosmed</h2>
+      <span class="mono mut">semua akun resmi Jetto — tekan buat langsung buka</span>
+    </div>
+    <div class="relaylinks">
+      <a class="relaylink" href="https://www.youtube.com/@asukajetto/videos" target="_blank" rel="noopener">
+        <span><span class="rl-name">YouTube</span><span class="rl-sub">Siaran, klip &amp; cover lagu</span></span>
+        <span class="rl-arrow">↗</span>
+      </a>
+      <a class="relaylink" href="https://www.instagram.com/asukajetto/" target="_blank" rel="noopener">
+        <span><span class="rl-name">Instagram</span><span class="rl-sub">Foto &amp; behind-the-scenes</span></span>
+        <span class="rl-arrow">↗</span>
+      </a>
+      <a class="relaylink" href="https://x.com/asukajetto" target="_blank" rel="noopener">
+        <span><span class="rl-name">X</span><span class="rl-sub">Update tertulis</span></span>
+        <span class="rl-arrow">↗</span>
+      </a>
+      <a class="relaylink" href="https://www.tiktok.com/@asukajetto" target="_blank" rel="noopener">
+        <span><span class="rl-name">TikTok</span><span class="rl-sub">Potongan pendek</span></span>
+        <span class="rl-arrow">↗</span>
+      </a>
+      <a class="relaylink" href="https://www.facebook.com/profile.php?id=61563759818590" target="_blank" rel="noopener">
+        <span><span class="rl-name">Facebook</span><span class="rl-sub">Update</span></span>
+        <span class="rl-arrow">↗</span>
+      </a>
+      <a class="relaylink" href="https://asukajetto.carrd.co/" target="_blank" rel="noopener">
+        <span><span class="rl-name">Carrd</span><span class="rl-sub">Lore &amp; character sheet</span></span>
+        <span class="rl-arrow">↗</span>
+      </a>
+      <a class="relaylink" href="https://www.twitch.tv/asukajetto" target="_blank" rel="noopener">
+        <span><span class="rl-name">Twitch</span><span class="rl-sub">Siaran cadangan</span></span>
+        <span class="rl-arrow">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- MASTHEAD -->
+  <section class="mast">
+    <div>
+      <div class="eyebrow" style="margin-bottom:20px">Fansite tidak resmi</div>
+      <h1>Semua siaran &amp; <em>cover lagu</em><br>Jetto, di satu tempat.</h1>
+      <p class="sub">Setiap Jetto siaran atau rilis cover baru di YouTube, otomatis muncul di sini. Nggak perlu bolak-balik cek channelnya sendiri.</p>
+      <a class="cta" href="#feed">Lihat semua unggahan ↓</a>
+    </div>
+
+    <div class="file">
+      <div class="eyebrow">Berkas pasien</div>
+      <h3>Asuka Cheeda Jetto</h3>
+      <div class="binom">Dokter hewan virtual · Eldergale</div>
+      <dl class="rows">
+        <div><dt>Panggilan</dt><dd>Asuka · Cheeda · Budawg</dd></div>
+        <div><dt>Jenis</dt><dd>Half husky</dd></div>
+        <div><dt>Kebangsaan</dt><dd>Eldergarian</dd></div>
+        <div><dt>BB / TB</dt><dd>42 kg · 165 cm</dd></div>
+        <div><dt>Gol. darah</dt><dd>Belum dicek</dd></div>
+        <div><dt>Asisten</dt><dd>Cipet</dd></div>
+        <div><dt>Nama fam</dt><dd>Suaka</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- PREFERENCES -->
+  <section class="vitals">
+    <div class="eyebrow">Hasil observasi klinis</div>
+
+    <div class="vgroup up">
+      <div class="vgroup-head">
+        <span class="arrow">+</span>
+        <h3>Bikin Happy</h3>
+        <span class="count">7 hal</span>
+      </div>
+      <div class="vpills">
+        <span class="vpill">Kamu</span>
+        <span class="vpill">Susu putih</span>
+        <span class="vpill">Bau bencin, spidol, plastik baru</span>
+        <span class="vpill">Musik: kpop, jpop, emo song (MCR), jedag jedug angkot, DJ pekanbaru, koplo, lagu nasional</span>
+        <span class="vpill">Pasien gemas (kucing, anjing, dkk)</span>
+        <span class="vpill">Anime: K-On, Imouto wa Umaru-chan, Horimiya</span>
+        <span class="vpill">Sate padang, ketoprak, ayam geprek Bang Dava</span>
+      </div>
+    </div>
+
+    <div class="vgroup down">
+      <div class="vgroup-head">
+        <span class="arrow">−</span>
+        <h3>Bikin Badmood</h3>
+        <span class="count">9 hal</span>
+      </div>
+      <div class="vpills">
+        <span class="vpill">Cheater, smurfer (booo, payah)</span>
+        <span class="vpill">Gelap, sempit, sepi</span>
+        <span class="vpill">Bocil kematian, tantrum</span>
+        <span class="vpill">Sign kiri belok kanan</span>
+        <span class="vpill">Orang posesif</span>
+        <span class="vpill">Gatekeeper (aku satu untuk semua)</span>
+        <span class="vpill">Orang ngutang gatau diri</span>
+        <span class="vpill">Hari Senin</span>
+        <span class="vpill">Matcha, taro, durian, lemak-lemak di baso kuah</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHIPS -->
+  <div class="chipbar" id="feed">
+    <div class="chipbar-head">
+      <h2>YouTube</h2>
+      <span class="mono mut">siaran &amp; cover lagu, terbaru duluan</span>
+    </div>
+    <div class="chiprow" id="tagRow"></div>
+  </div>
+
+  <!-- FEED -->
+  <main class="feed" id="feedGrid"></main>
+
+  <footer>
+    <p>Suaka Station · fansite tidak resmi yang dibuat penggemar.<br>Semua media di-embed dari sumber aslinya. Fanart tetap milik masing-masing artist.</p>
+    <p>Relay: youtube · x · instagram<br>Konsep visual v0.1</p>
+  </footer>
+</div>
+
+<script>
+/* =========================================================
+   MOCK DATA — bentuknya sama persis dengan schema `signals`
+   ========================================================= */
+const TAGS = [
+  {slug:'kerjasu', label:'Live Streaming', name:'Siaran',     color:'#7BE0B4'},
+  {slug:'cover',   label:'Cover Song',     name:'Cover Lagu', color:'#8FD4E8'},
+];
+
+
+const now = Date.now();
+const h = n => now - n*3600e3;
+
+const SIGNALS = [
+  {id:'ls_01', url:'https://www.youtube.com/@asukajetto/streams', platform:'youtube', kind:'stream', tags:['kerjasu'], title:'\u3010VALORANT\u3011KITA SIAP DIREKRUT \u3010VTuber Indonesia\u3011', duration:'2:32:24', views:2100, ratio:'16 : 9', span:4, publishedAt:h(11), author:'@asukajetto'},
+  {id:'ls_02', url:'https://www.youtube.com/@asukajetto/streams', platform:'youtube', kind:'stream', tags:['kerjasu'], title:'\u3010CURSE OF THE ABANDONED FLOOR\u3011JANGAN COBA-COBA KE LANTAI ITU \u3010VTuber Indonesia\u3011', duration:'2:49:13', views:1500, ratio:'16 : 9', span:4, publishedAt:h(24), author:'@asukajetto'},
+  {id:'ls_03', url:'https://www.youtube.com/@asukajetto/streams', platform:'youtube', kind:'stream', tags:['kerjasu'], title:'\u3010PERFECT NEIGHBOR\u3011AKU PINDAH RUMAH TAPI TETANGGANYA ANEH...... \u3010VTuber Indonesia\u3011', duration:'2:07:24', views:693, ratio:'16 : 9', span:4, publishedAt:h(48), author:'@asukajetto'},
+  {id:'ls_04', url:'https://www.youtube.com/@asukajetto/streams', platform:'youtube', kind:'stream', tags:['kerjasu'], title:'\u3010GUERILLA\u3011VALORANT TAPI MINANG \u3010VTuber Indonesia\u3011', duration:'2:04:09', views:744, ratio:'16 : 9', span:4, publishedAt:h(72), author:'@asukajetto'},
+  {id:'ls_05', url:'https://www.youtube.com/@asukajetto/streams', platform:'youtube', kind:'stream', tags:['kerjasu'], title:'\u3010SLEDDING GAME\u3011KALO AKU JADI KODOK, KAMU MASIH SAYANG AKU GA? \u3010VTuber Indonesia\u3011', duration:'2:37:54', views:557, ratio:'16 : 9', span:4, publishedAt:h(144), author:'@asukajetto'},
+  {id:'ls_06', url:'https://www.youtube.com/@asukajetto/streams', platform:'youtube', kind:'stream', tags:['kerjasu'], title:'\u3010VETTALK\u3011KENALAN DENGAN PENYAKIT FIP PADA KUCING \u3010VTuber Indonesia\u3011', duration:'1:44:50', views:692, ratio:'16 : 9', span:4, publishedAt:h(168), author:'@asukajetto'},
+
+  {id:'sg_01', yt:'az-5QgmrOug', url:'https://www.youtube.com/watch?v=az-5QgmrOug', platform:'youtube', kind:'stream', tags:['cover'], title:'\u3010COVER\u3011Perawan atau Janda - Cita Citata \u3010Jetto x Rimu\u3011', duration:'3:46', views:40000, ratio:'16 : 9', span:4, publishedAt:h(730), author:'jetto and Pinku Rimu'},
+  {id:'sg_02', url:'https://www.youtube.com/@asukajetto/videos', platform:'youtube', kind:'stream', tags:['cover'], title:'\u3010COVER\u3011LATHI - Weird Genius ft. Sara Fajira (Rap Arrange + Minang Inst.)', duration:'3:06', views:16000, ratio:'16 : 9', span:4, publishedAt:h(220), author:'@asukajetto'},
+  {id:'sg_03', url:'https://www.youtube.com/@asukajetto/videos', platform:'youtube', kind:'stream', tags:['cover'], title:'Semua Aku Dirayakan - Nadin Amizah, cover oleh Jetto', duration:'5:11', views:5400, ratio:'16 : 9', span:4, publishedAt:h(1460), author:'@asukajetto'},
+  {id:'sg_04', url:'https://www.youtube.com/@asukajetto/videos', platform:'youtube', kind:'stream', tags:['cover'], title:'\u3010COVER\u3011Apa Mungkin - Bernadya (Pop Punk Version)', duration:'3:46', views:5200, ratio:'16 : 9', span:4, publishedAt:h(4380), author:'@asukajetto'},
+  {id:'sg_05', url:'https://www.youtube.com/@asukajetto/videos', platform:'youtube', kind:'stream', tags:['cover'], title:'\u3010COVER\u3011KING - Kanaria | Rap Arrange', duration:'2:17', views:1900, ratio:'16 : 9', span:4, publishedAt:h(5840), author:'@asukajetto'},
+];
+
+/* ---------- helpers ---------- */
+const BULAN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+function stamp(ms){const d=new Date(ms);return `${String(d.getDate()).padStart(2,'0')} ${BULAN[d.getMonth()]} · ${String(d.getHours()).padStart(2,'0')}.${String(d.getMinutes()).padStart(2,'0')}`}
+function ago(ms){const m=(now-ms)/6e4;if(m<60)return `${Math.round(m)} mnt lalu`;if(m<1440)return `${Math.round(m/60)} jam lalu`;return `${Math.round(m/1440)} hari lalu`}
+function serial(id){let s=0;for(const c of id)s=(s*31+c.charCodeAt(0))%9000;return 'EG-'+String(s+1000)}
+
+/* =========================================================
+   CHIPS
+   ========================================================= */
+let activeTag=null;
+
+function renderChips(){
+  const pool=SIGNALS;
+
+  const tagRow=document.getElementById('tagRow');
+  tagRow.innerHTML=`<button class="chip" data-tag="" aria-pressed="${activeTag===null}">
+      <span class="swatch" style="background:#EDE6EC"></span>semua<span class="n">${pool.length}</span></button>`
+    + TAGS.map(t=>{
+      const n=pool.filter(s=>s.tags.includes(t.slug)).length;
+      return `<button class="chip" data-tag="${t.slug}" aria-pressed="${activeTag===t.slug}" title="${t.name}"${n?'':' disabled'}>
+        <span class="swatch" style="background:${t.color}"></span>${t.label}<span class="n">${n}</span></button>`;
+    }).join('');
+
+  tagRow.querySelectorAll('[data-tag]').forEach(b=>b.onclick=()=>{
+    activeTag=b.dataset.tag||null; sync();
+  });
+}
+
+/* =========================================================
+   FEED
+   ========================================================= */
+function fmtViews(n){
+  if(n>=10000) return Math.round(n/1000)+'K';
+  if(n>=1000)  return (Math.round(n/100)/10)+'K';
+  return String(n);
+}
+function plate(s){
+  if(s.kind==='note') return '';
+  const cls=s.ratio==='16 : 9'?'r169':s.ratio==='4 : 5'?'r45':'r11';
+  const dur=s.duration?`<span class="dur">${s.duration}</span>`:'';
+  if(s.yt){
+    return `<div class="plate ${cls} has-media" data-yt="${s.yt}" data-ratio="${s.ratio}">
+      <img src="https://img.youtube.com/vi/${s.yt}/maxresdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/${s.yt}/hqdefault.jpg'"
+           alt="" loading="lazy">
+      <span class="glow" style="opacity:.35"></span>
+      <button class="play" aria-label="Putar video"></button>${dur}</div>`;
+  }
+  return `<div class="plate ${cls}" data-ratio="${s.ratio}"><span class="glow"></span>${dur}</div>`;
+}
+function tagLabel(slug){ const t=TAGS.find(x=>x.slug===slug); return t?t.label:'#'+slug; }
+function card(s,i){
+  const tagLinks=s.tags.map(t=>`<span class="tagpill">${tagLabel(t)}</span>`).join(' ');
+  const spanCls=s.span===8?'w8':s.span===6?'w6':'';
+  const title=s.kind==='note'
+    ? `<p class="note">"${s.title}"</p>`
+    : `<h4>${s.title}</h4>`;
+  const credit=s.credit?`<div class="credit">Karya <b>${s.author}</b> · tampil lewat embed, hak cipta tetap milik artist</div>`:'';
+  return `<article class="card ${spanCls}" style="animation-delay:${Math.min(i*35,420)}ms">
+    <a class="card-link" href="${s.url}" target="_blank" rel="noopener" aria-label="Buka di ${s.platform}: ${s.title || s.body}">
+      <div class="rail">
+        <span class="src">${s.platform}</span>
+        <span>${serial(s.id)}</span>
+      </div>
+      ${plate(s)}
+      <div class="body">
+        ${title}
+        ${credit}
+        <div class="meta"><span>${tagLinks}</span><span>${(s.views!==undefined?fmtViews(s.views)+' ditonton · ':'')+ago(s.publishedAt)}</span></div>
+      </div>
+    </a>
+  </article>`;
+}
+function renderFeed(){
+  const pool=SIGNALS;
+  const out=pool
+    .filter(s=>activeTag===null||s.tags.includes(activeTag))
+    .sort((a,b)=>b.publishedAt-a.publishedAt);
+  const grid=document.getElementById('feedGrid');
+  grid.innerHTML = out.length
+    ? out.map(card).join('')
+    : `<div class="empty"><h4>Belum ada apa-apa di kategori ini.</h4><p>Coba pilih "semua" untuk lihat semua unggahan.</p></div>`;
+
+  grid.querySelectorAll('.plate[data-yt] .play').forEach(btn=>{
+    btn.onclick=(e)=>{
+      e.preventDefault(); e.stopPropagation();
+      const p=btn.closest('.plate');
+      p.innerHTML=`<iframe src="https://www.youtube.com/embed/${p.dataset.yt}?autoplay=1&rel=0"
+        allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture"
+        allowfullscreen title="Pemutar YouTube"></iframe>`;
+    };
+  });
+}
+
+function sync(){renderChips();renderFeed()}
+
+function tick(){
+  const d=new Date();
+  document.getElementById('clock').textContent=
+    `${String(d.getHours()).padStart(2,'0')}.${String(d.getMinutes()).padStart(2,'0')} WIB`;
+}
+tick();setInterval(tick,1000*20);
+sync();
+</script>
+</body>
+</html>
