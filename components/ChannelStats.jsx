@@ -28,8 +28,12 @@ const ICONS = {
   ),
 };
 
-export default function ChannelStats() {
+export default function ChannelStats({ liveStats = null }) {
   const { t } = useLang();
+  const stats = CHANNEL_STATS.map((s) => ({
+    ...s,
+    value: liveStats?.[s.key] || s.value,
+  }));
 
   return (
     <section className="ytstats">
@@ -65,7 +69,7 @@ export default function ChannelStats() {
       </Reveal>
 
       <div className="ytstat-grid">
-        {CHANNEL_STATS.map((s, i) => (
+        {stats.map((s, i) => (
           <motion.div
             key={s.key}
             className="ytstat-card"
