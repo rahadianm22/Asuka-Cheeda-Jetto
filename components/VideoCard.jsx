@@ -5,15 +5,10 @@ import { motion } from 'framer-motion';
 import { thumb, watchUrl, embedUrl, formatDate } from '@/lib/data';
 import { useLang } from './LanguageProvider';
 
-function serial(id) {
-  let s = 0;
-  for (const c of id) s = (s * 31 + c.charCodeAt(0)) % 9000;
-  return `EG-${s + 1000}`;
-}
-
 export default function VideoCard({ video, index }) {
   const { t, lang } = useLang();
   const [playing, setPlaying] = useState(false);
+  const serial = `JT-${String(video.serialNumber).padStart(4, '0')}`;
 
   return (
     <motion.article
@@ -33,7 +28,7 @@ export default function VideoCard({ video, index }) {
       >
         <div className="rail">
           <span className="src">youtube</span>
-          <span>{serial(video.id)}</span>
+          <span>{serial}</span>
         </div>
 
         <div className="plate">

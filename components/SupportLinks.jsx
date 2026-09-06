@@ -1,25 +1,26 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { SOCIALS } from '@/lib/data';
+import { SUPPORTS } from '@/lib/data';
 import { useLang } from './LanguageProvider';
 import Reveal from './Reveal';
 
-export default function SocialLinks() {
+export default function SupportLinks() {
   const { t } = useLang();
 
   return (
-    <section className="sectionbar sosmed">
+    <section className="sectionbar">
       <Reveal className="sectionbar-head">
-        <h2>{t('sosmedTitle')}</h2>
-        <span className="mono mut">{t('sosmedSub')}</span>
+        <h2>{t('supportTitle')}</h2>
+        <span className="mono mut">{t('supportSub')}</span>
       </Reveal>
 
-      <div className="relaylinks">
-        {SOCIALS.map((s, i) => (
+      <div className="supportlinks">
+        {SUPPORTS.map((s, i) => (
           <motion.a
             key={s.name}
-            className="relaylink"
+            className="supportlink"
+            style={{ '--support-accent': s.accent }}
             href={s.href}
             target="_blank"
             rel="noopener noreferrer"
@@ -29,7 +30,10 @@ export default function SocialLinks() {
             transition={{ duration: 0.45, delay: i * 0.05, ease: [0.2, 0.7, 0.3, 1] }}
             whileHover={{ y: -3 }}
           >
-            <span>
+            <span className="support-avatar">
+              <img src={s.logo} alt="" width={56} height={56} />
+            </span>
+            <span className="support-text">
               <span className="rl-name">{s.name}</span>
               <span className="rl-sub">{t(s.key)}</span>
             </span>

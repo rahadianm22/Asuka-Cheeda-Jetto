@@ -4,7 +4,10 @@ import TopBar from '@/components/TopBar';
 import Ticker from '@/components/Ticker';
 import Hero from '@/components/Hero';
 import SocialLinks from '@/components/SocialLinks';
+import SupportLinks from '@/components/SupportLinks';
+import ChannelStats from '@/components/ChannelStats';
 import Masthead from '@/components/Masthead';
+import CharacterIntro from '@/components/CharacterIntro';
 import Preferences from '@/components/Preferences';
 import Feed from '@/components/Feed';
 import Reveal from '@/components/Reveal';
@@ -25,7 +28,7 @@ function Footer() {
 
         <div className="foot-stamp" aria-hidden="true">
           <span className="foot-stamp-label">{t('footerRecord')}</span>
-          <span className="foot-stamp-num">EG-0001</span>
+          <span className="foot-stamp-num">JT-0001</span>
           <span className="foot-stamp-status">{t('footerStatus')}</span>
         </div>
       </div>
@@ -42,8 +45,11 @@ export default function Home() {
       <Hero />
       <div className="wrap">
         <Masthead />
+        <CharacterIntro />
         <Preferences />
+        <ChannelStats />
         <Feed />
+        <SupportLinks />
         <SocialLinks />
         <Footer />
       </div>
