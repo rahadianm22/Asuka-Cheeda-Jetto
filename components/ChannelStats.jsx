@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { CHANNEL_STATS } from '@/lib/data';
+import { CHANNEL_STATS, YOUTUBE_CHANNEL } from '@/lib/data';
 import { useLang } from './LanguageProvider';
 import Reveal from './Reveal';
 
@@ -36,6 +36,32 @@ export default function ChannelStats() {
       <Reveal className="sectionbar-head">
         <h2>{t('ytStatsEyebrow')}</h2>
         <span className="mono mut">{t('ytStatsSub')}</span>
+      </Reveal>
+
+      <Reveal>
+        <motion.a
+          className="ytprofile"
+          href={YOUTUBE_CHANNEL.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          whileHover={{ y: -2 }}
+        >
+          <span className="ytprofile-id">
+            <span className="ytprofile-avatar">
+              <img src={YOUTUBE_CHANNEL.avatar} alt="" />
+            </span>
+            <span className="ytprofile-text">
+              <span className="ytprofile-name">{YOUTUBE_CHANNEL.name}</span>
+              <span className="ytprofile-handle">{YOUTUBE_CHANNEL.handle}</span>
+            </span>
+          </span>
+          <span className="yt-cta">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+              <path d="M9.5 7.5v9l7.5-4.5-7.5-4.5Z" />
+            </svg>
+            {t('ytVisitChannel')}
+          </span>
+        </motion.a>
       </Reveal>
 
       <div className="ytstat-grid">
