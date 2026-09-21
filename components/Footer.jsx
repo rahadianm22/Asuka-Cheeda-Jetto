@@ -16,11 +16,16 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="foot-stamp" aria-hidden="true">
-          <span className="foot-stamp-label">{t('footerRecord')}</span>
-          <span className="foot-stamp-num">JT-0001</span>
-          <span className="foot-stamp-status">{t('footerStatus')}</span>
-        </div>
+        <a
+          className="foot-credit"
+          href="https://rahadianm22.my.id/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span className="foot-credit-label">{t('footerCreatedBy')}</span>
+          <img src="/android-chrome-512x512.png" alt="" width={20} height={20} />
+          <span className="foot-credit-name">Rahadian Maulana</span>
+        </a>
       </div>
     </Reveal>
   );

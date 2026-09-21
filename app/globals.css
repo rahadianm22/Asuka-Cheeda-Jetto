@@ -497,25 +497,21 @@ footer::before {
   display: block; margin-top: 3px;
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--mut);
 }
-.foot-stamp {
-  display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
-  padding: 10px 16px; border: 1px solid var(--line); border-radius: 2px;
-  text-align: right;
+.foot-credit {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px; border: 1px solid var(--line); border-radius: 999px;
+  text-decoration: none; color: var(--paper);
+  transition: border-color 0.16s, background-color 0.16s;
 }
-.foot-stamp-label {
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.22em;
+.foot-credit:hover { border-color: rgba(193,161,207,0.6); background-color: var(--chassis-2); }
+.foot-credit img { border-radius: 6px; }
+.foot-credit-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--mut);
 }
-.foot-stamp-num {
-  font-family: var(--mono); font-size: 15px; font-weight: 700; letter-spacing: 0.05em; color: var(--lav-hi);
-}
-.foot-stamp-status {
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--pulse);
-}
+.foot-credit-name { font-size: 13px; font-weight: 600; color: var(--lav-hi); }
 @media (max-width: 620px) {
   .foot-main { flex-direction: column; gap: 24px; align-items: flex-start; }
-  .foot-stamp { align-items: flex-start; text-align: left; }
 }
 
 /* ---------- responsive ---------- */
