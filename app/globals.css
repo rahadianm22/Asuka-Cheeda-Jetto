@@ -196,6 +196,14 @@ body {
   position: relative; display: block; padding: 0; border: 0; background: none; color: inherit;
 }
 .pose-btn .char-pop { top: 10%; font-size: 22px; }
+/* A gentle sway on hover says "you can click me"; it stops as soon as the cursor leaves. */
+.pose-sway { display: block; transform-origin: 50% 100%; }
+.pose-btn:hover .pose-sway,
+.pose-btn:focus-visible .pose-sway { animation: pose-sway 1.1s ease-in-out infinite alternate; }
+@keyframes pose-sway {
+  from { transform: rotate(-1.6deg); }
+  to { transform: rotate(1.6deg); }
+}
 /* A speech bubble beside her head that invites a pat when the cursor (or keyboard focus) arrives. */
 .pose-hint {
   position: absolute; left: 4%; top: 13%; z-index: 4;

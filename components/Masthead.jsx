@@ -74,9 +74,12 @@ export default function Masthead() {
         transition={{ type: 'spring', stiffness: 120, damping: 16, delay: 0.2 }}
       >
         <button type="button" className="pose-btn" onClick={wiggle}>
-          <motion.span className="pose-inner" animate={controls} style={{ originY: 1 }}>
-            <Image src="/pose.png" alt="" width={703} height={900} />
-          </motion.span>
+          {/* Hover sway lives on its own wrapper so it never fights the click wiggle below. */}
+          <span className="pose-sway">
+            <motion.span className="pose-inner" animate={controls} style={{ originY: 1 }}>
+              <Image src="/pose.png" alt="" width={703} height={900} />
+            </motion.span>
+          </span>
           <span className="pose-hint">
             <Paw className="pose-hint-paw" />
             {t('poseAction')}
