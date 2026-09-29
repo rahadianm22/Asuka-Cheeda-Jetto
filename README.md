@@ -43,15 +43,10 @@ Topik VETTALK diambil dari judul (tag `【...】` dibuang). Judul yang ditulis k
 diubah jadi huruf kalimat, jadi singkatan seperti FIP bisa ikut kecil: tulis topik yang benar
 di `VETTALKS` (cocokkan `yt`), dan tulisan itu yang dipakai.
 
-## Kredit artis
+## Gambar
 
-Isi `ART_CREDITS` di `lib/data.js`:
-
-```js
-{ work: { id: 'Ilustrasi hero', en: 'Hero illustration' }, file: 'hero.jpg', artist: 'Nama Artis', href: 'https://...' },
-```
-
-Baris dengan `artist` kosong tidak ditampilkan. Kredit muncul di footer begitu ada minimal satu nama.
+Semua gambar karakter dan ilustrasi berasal dari Jetto sendiri; footer menyebutkan kepemilikannya
+(`artOwnership` di `lib/i18n.js`). Kalau nanti ada karya artis lain, tambahkan kreditnya di sana.
 
 ## Mengubah teks / terjemahan
 
@@ -77,9 +72,10 @@ components/
   SupportLinks          Trakteer & Saweria
   SocialLinks           akun sosmed
   Footer, BackToTop     penutup + tombol paw ke atas
+  NotFoundCard          halaman 404 "Pasien tidak ditemukan"
   PawCursor, PawBurst   kursor paw & jejak kaki
 lib/
-  data.js               data cadangan, sosmed, kredit artis
+  data.js               data cadangan & sosmed
   youtube.js            pengambilan data YouTube
   i18n.js               kamus terjemahan
 ```

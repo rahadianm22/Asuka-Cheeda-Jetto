@@ -1,34 +1,41 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { animate, useInView, useReducedMotion } from 'framer-motion';
+import { animate, motion, useInView, useReducedMotion } from 'framer-motion';
 import { CHANNEL_STATS, YOUTUBE_CHANNEL } from '@/lib/data';
 import { useLang } from './LanguageProvider';
 import SectionHead from './SectionHead';
+import SocialIcon from './SocialIcon';
+import Paw from './Paw';
 import Reveal from './Reveal';
 
+// Subscribers are the fam (a paw), views are eyes on Jetto, contents are what she uploads.
 const ICONS = {
-  subs: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="8.5" r="3.2" />
-      <path d="M5.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6" />
-    </svg>
-  ),
+  subs: <Paw className="ytstat-badge-icon ytstat-badge-paw" />,
   views: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 19V11" />
-      <path d="M12 19V5" />
-      <path d="M19 19v-6" />
+    <svg className="ytstat-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z" />
+      <circle cx="12" cy="12" r="3" fill="currentColor" />
     </svg>
   ),
-  contents: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M7 3.5h7l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z" />
-      <path d="M14 3.5V8h4" />
-      <path d="M9 13h6M9 16.5h6" />
-    </svg>
-  ),
+  contents: <SocialIcon name="YouTube" className="ytstat-badge-icon" />,
 };
+
+// A heartbeat line under each number: the page's clinic theme, drawn once as the card appears.
+function Heartbeat({ delay }) {
+  return (
+    <svg className="ytstat-ecg" viewBox="0 0 200 32" preserveAspectRatio="none" aria-hidden="true">
+      <motion.path
+        d="M0 18 H78 l6 -5 l5 9 l7 -18 l8 26 l6 -16 l5 4 H200"
+        vectorEffect="non-scaling-stroke"
+        initial={{ pathLength: 0 }}
+        whileInView={{ pathLength: 1 }}
+        viewport={{ once: true, margin: '-40px' }}
+        transition={{ duration: 1.3, delay, ease: 'easeInOut' }}
+      />
+    </svg>
+  );
+}
 
 // Counts up from zero the first time the number scrolls into view.
 // The server renders the final value, so no-JS readers still get the real number.
@@ -75,6 +82,7 @@ export default function ChannelStats({ liveStats = null }) {
     <section className="ytstats">
       <SectionHead
         no="03"
+        icon={<SocialIcon name="YouTube" className="shead-icon" />}
         title={t('ytStatsEyebrow')}
         sub={t(isLive ? 'ytStatsSub' : 'ytStatsSubManual')}
       />
@@ -91,22 +99,22 @@ export default function ChannelStats({ liveStats = null }) {
             </span>
           </span>
           <span className="yt-cta">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" aria-hidden="true">
-              <path d="M9.5 7.5v9l7.5-4.5-7.5-4.5Z" />
-            </svg>
+            <SocialIcon name="YouTube" className="yt-cta-icon" />
             {t('ytVisitChannel')}
           </span>
         </a>
       </Reveal>
 
       <Reveal className="ytstat-grid">
-        {stats.map((s) => (
+        {stats.map((s, i) => (
           <div key={s.key} className="ytstat-card">
-            <CountUp value={s.value} />
-            <span className="ytstat-label">
-              <span className="ytstat-icon" aria-hidden="true">{ICONS[s.icon]}</span>
-              {t(s.labelKey)}
-            </span>
+            <div className="ytstat-top">
+              <span className="ytstat-badge" aria-hidden="true">{ICONS[s.icon]}</span>
+              <CountUp value={s.value} />
+            </div>
+            <span className="ytstat-label">{t(s.labelKey)}</span>
+            <span className="ytstat-note">{t(s.noteKey)}</span>
+            <Heartbeat delay={0.3 + i * 0.25} />
           </div>
         ))}
       </Reveal>

@@ -25,8 +25,11 @@ Owner's words: "buat seheboh mungkin dan tetap dalam design yg eye catching".
 - "Dukung Jetto" has a transparent background (no lavender panel); its two links are dark tiles like the rest of the page. Owner request, 2026-09-28.
 
 - All section titles are left-aligned. Owner request, 2026-09-28. Section variety comes from layout and content, not title alignment.
+- All section titles share one size and stay on one line (the size scales down on phones instead of wrapping), each with its "No." index. Owner request, 2026-09-29.
+- Cheeda and Cipet pop out over the top of their frames; Cipet is "Peliharaan Jetto". Owner request, 2026-09-29.
 
 - "Website Asuka Jetto" in the top bar is a link back to the top, and a lavender paw button ("Ke atas") hops in near the bottom of the page. Owner request, 2026-09-29.
-- Artist credits are shown only once the owner fills in real names (`ART_CREDITS` in lib/data.js).
+- All character art and illustrations come from Jetto herself; the footer states that ownership instead of per-artist credits. Owner confirmation, 2026-09-29.
+- The 404 page is the clinic's "patient not found" chart, with Cheeda peeking over the corner.
 
 Dial: ENERGY 2 / RHYTHM 3 / MOTION 3

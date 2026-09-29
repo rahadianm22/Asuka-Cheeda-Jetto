@@ -3,13 +3,11 @@
 import { motion } from 'framer-motion';
 import { useLang } from './LanguageProvider';
 import Reveal from './Reveal';
-import { ART_CREDITS } from '@/lib/data';
 
 const WOOF = ['WOOF', 'WOOF~'];
 
 export default function Footer() {
-  const { t, lang } = useLang();
-  const credits = ART_CREDITS.filter((c) => c.artist);
+  const { t } = useLang();
   return (
     <Reveal as="footer">
       <p className="foot-woof" aria-hidden="true">
@@ -49,21 +47,10 @@ export default function Footer() {
         </a>
       </div>
 
-      {credits.length > 0 && (
-        <p className="foot-art">
-          <span className="foot-art-label">{t('creditsLabel')}</span>
-          {credits.map((c) => (
-            <span className="foot-art-item" key={c.file}>
-              {c.work[lang] ?? c.work.id}:{' '}
-              {c.href ? (
-                <a href={c.href} target="_blank" rel="noopener noreferrer">{c.artist}</a>
-              ) : (
-                c.artist
-              )}
-            </span>
-          ))}
-        </p>
-      )}
+      <p className="foot-art">
+        <span className="foot-art-label">{t('creditsLabel')}</span>
+        {t('artOwnership')}
+      </p>
     </Reveal>
   );
 }

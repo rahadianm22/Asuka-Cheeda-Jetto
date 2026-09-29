@@ -19,7 +19,7 @@ export default function Feed({ covers = COVERS }) {
 
   return (
     <section id="feed" className="feed-section">
-      <SectionHead no="04" align="wide" title={t('feedTitle')} sub={t('feedSub')} />
+      <SectionHead no="04" title={t('feedTitle')} sub={t('feedSub')} />
 
       <Reveal className="feed" y={40}>
         {videos.length ? (

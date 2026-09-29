@@ -36,9 +36,11 @@ export default function TopBar() {
       <motion.span className="bar-progress" style={{ scaleX: scrollYProgress }} aria-hidden="true" />
       <a
         className="brand"
-        href="#top"
+        href="/"
         title={t('brandHint')}
         onClick={(e) => {
+          // On the home page, glide back up; anywhere else (like the 404 page), go home.
+          if (window.location.pathname !== '/') return;
           e.preventDefault();
           scrollToTop();
         }}

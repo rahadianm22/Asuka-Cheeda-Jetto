@@ -2,7 +2,9 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { PROFILE_ROWS } from '@/lib/data';
+import { PROFILE_ROWS, YOUTUBE_CHANNEL } from '@/lib/data';
+import SocialIcon from './SocialIcon';
+import Paw from './Paw';
 import { useLang } from './LanguageProvider';
 import Reveal from './Reveal';
 
@@ -35,9 +37,15 @@ export default function Masthead() {
           {after.slice(punct.length)}
         </h2>
         <p className="sub">{t('mastSub')}</p>
-        <a className="cta" href="#feed">
-          {t('mastCta')}
-        </a>
+        <div className="mast-actions">
+          <a className="cta" href="#feed">
+            {t('mastCta')}
+          </a>
+          <a className="cta cta-secondary" href={YOUTUBE_CHANNEL.href} target="_blank" rel="noopener noreferrer">
+            <SocialIcon name="YouTube" className="cta-icon" />
+            {t('mastCtaYoutube')}
+          </a>
+        </div>
       </Reveal>
 
       {/* Jetto holds a clipboard in this pose, so she stands beside her own patient file. */}
@@ -65,7 +73,10 @@ export default function Masthead() {
             {t('fileStamp')}
           </motion.div>
           <div className="eyebrow">{t('fileEyebrow')}</div>
-          <h3>Asuka Cheeda Jetto</h3>
+          <h3>
+            Asuka Cheeda Jetto
+            <Paw className="file-name-paw" />
+          </h3>
           <div className="binom">{t('fileBinom')}</div>
           <dl className="rows">
             {PROFILE_ROWS.map((row) => (
@@ -75,6 +86,15 @@ export default function Masthead() {
               </div>
             ))}
           </dl>
+          {/* A patient walked across the file. */}
+          <div className="file-trail">
+            <span className="file-trail-label">{t('fileTrail')}</span>
+            <span className="file-trail-paws" aria-hidden="true">
+              {[0, 1, 2, 3, 4].map((i) => (
+                <Paw key={i} className="file-trail-paw" />
+              ))}
+            </span>
+          </div>
         </div>
       </Reveal>
     </section>

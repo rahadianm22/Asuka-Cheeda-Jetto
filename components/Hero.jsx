@@ -58,7 +58,7 @@ export default function Hero() {
       >
         <Image
           src="/hero.jpg"
-          alt="Ilustrasi Asuka Cheeda Jetto duduk di padang rumput"
+          alt={t('heroAlt')}
           fill
           priority
           sizes="100vw"

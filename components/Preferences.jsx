@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { LIKES, DISLIKES } from '@/lib/data';
 import { useLang } from './LanguageProvider';
 import Reveal from './Reveal';
+import SectionHead from './SectionHead';
 
 // Sticker tilts, repeated in order so the list looks hand-placed rather than random on every render.
 const TILTS = [-1.2, 0.9, -0.6, 1.1, -0.9, 0.6, -0.4, 1, -0.7];
@@ -75,14 +76,13 @@ export default function Preferences() {
   const { t } = useLang();
 
   return (
-    <section className="vitals">
-      <div className="chipbar-head">
-        <Reveal as="h2">{t('vitalsEyebrow')}</Reveal>
-      </div>
-
-      <div className="vgroups">
-        <PillGroup tone="up" Icon={Heart} titleKey="groupUp" countKey="countUp" keys={LIKES} highlightFirst />
-        <PillGroup tone="down" Icon={BrokenHeart} titleKey="groupDown" countKey="countDown" keys={DISLIKES} />
+    <section className="vitals-section">
+      <SectionHead no="02" title={t('vitalsEyebrow')} />
+      <div className="vitals">
+        <div className="vgroups">
+          <PillGroup tone="up" Icon={Heart} titleKey="groupUp" countKey="countUp" keys={LIKES} highlightFirst />
+          <PillGroup tone="down" Icon={BrokenHeart} titleKey="groupDown" countKey="countDown" keys={DISLIKES} />
+        </div>
       </div>
     </section>
   );
