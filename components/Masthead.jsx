@@ -1,15 +1,32 @@
 'use client';
 
+import { useRef } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, useAnimationControls } from 'framer-motion';
+import Pops, { usePops } from './Pops';
 import { PROFILE_ROWS, YOUTUBE_CHANNEL } from '@/lib/data';
 import SocialIcon from './SocialIcon';
 import Paw from './Paw';
 import { useLang } from './LanguageProvider';
 import Reveal from './Reveal';
 
+const POSE_POPS = ['woof!', 'awoo~', 'hehe~'];
+
 export default function Masthead() {
   const { t } = useLang();
+  const controls = useAnimationControls();
+  const [pops, addPop, removePop] = usePops();
+  const popIndex = useRef(0);
+
+  // Jetto sways on her feet when poked, like a happy wag.
+  const wiggle = () => {
+    addPop(POSE_POPS[popIndex.current++ % POSE_POPS.length]);
+    controls.start({
+      rotate: [0, -5, 4.5, -3.5, 2.5, -1, 0],
+      y: [0, -12, 0, -6, 0],
+      transition: { duration: 0.85, ease: 'easeInOut' },
+    });
+  };
   // Keeps the "!" after the underlined name on the same line.
   const after = t('mastH1b');
   const punct = after.match(/^[!,.~]*/)[0];
@@ -55,9 +72,17 @@ export default function Masthead() {
         whileInView={{ opacity: 1, x: 0, y: 0, rotate: 0 }}
         viewport={{ once: true, margin: '-80px' }}
         transition={{ type: 'spring', stiffness: 120, damping: 16, delay: 0.2 }}
-        aria-hidden="true"
       >
-        <Image src="/pose.png" alt="" width={703} height={900} />
+        <button type="button" className="pose-btn" onClick={wiggle}>
+          <motion.span className="pose-inner" animate={controls} style={{ originY: 1 }}>
+            <Image src="/pose.png" alt="" width={703} height={900} />
+          </motion.span>
+          <span className="pose-hint">
+            <Paw className="pose-hint-paw" />
+            {t('poseAction')}
+          </span>
+          <Pops pops={pops} onDone={removePop} />
+        </button>
       </motion.div>
 
       <Reveal className="file-wrap" delay={0.12} y={50}>

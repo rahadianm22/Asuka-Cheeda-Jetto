@@ -1,37 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence, useAnimationControls } from 'framer-motion';
+import { motion, useAnimationControls } from 'framer-motion';
 import { useLang } from './LanguageProvider';
 import SectionHead from './SectionHead';
 import Reveal from './Reveal';
-
-function Pops({ pops, text, onDone }) {
-  return (
-    <AnimatePresence>
-      {pops.map((id) => (
-        <motion.span
-          key={id}
-          className="char-pop"
-          aria-hidden="true"
-          initial={{ opacity: 1, y: 0, scale: 0.8 }}
-          animate={{ opacity: 0, y: -80, scale: 1.15 }}
-          transition={{ duration: 0.9, ease: 'easeOut' }}
-          onAnimationComplete={() => onDone(id)}
-        >
-          {text}
-        </motion.span>
-      ))}
-    </AnimatePresence>
-  );
-}
-
-function usePops() {
-  const [pops, setPops] = useState([]);
-  const add = () => setPops((p) => [...p, `${Date.now()}-${Math.random()}`]);
-  const remove = (id) => setPops((p) => p.filter((x) => x !== id));
-  return [pops, add, remove];
-}
+import Pops, { usePops } from './Pops';
 
 // Cheeda asks to have her head patted, so her portrait is a button that does exactly that.
 function Cheeda({ t, tf }) {
@@ -41,7 +15,7 @@ function Cheeda({ t, tf }) {
 
   const pat = () => {
     setPats((n) => n + 1);
-    addPop();
+    addPop(t('patPop'));
     controls.start({
       rotate: [0, -9, 8, -6, 4, 0],
       scaleY: [1, 0.86, 1.06, 1],
@@ -53,7 +27,7 @@ function Cheeda({ t, tf }) {
     <div className="charrow" style={{ '--char-accent': '#c1a1cf' }}>
       <button type="button" className="char-portrait" onClick={pat}>
         <motion.img src="/cheeda.png" alt="" animate={controls} style={{ originY: 1 }} />
-        <Pops pops={pops} text={t('patPop')} onDone={removePop} />
+        <Pops pops={pops} onDone={removePop} />
         <span className="char-action">{t('patAction')}</span>
       </button>
       <div className="char-bubble">
@@ -76,7 +50,7 @@ function Cipet({ t }) {
   const [pops, addPop, removePop] = usePops();
 
   const toggle = () => {
-    if (!up) addPop();
+    if (!up) addPop(t('carryPop'));
     setUp((v) => !v);
   };
 
@@ -89,7 +63,7 @@ function Cipet({ t }) {
           animate={up ? { y: -26, rotate: -7, scale: 1.1 } : { y: 0, rotate: 0, scale: 1 }}
           transition={{ type: 'spring', stiffness: 380, damping: 13 }}
         />
-        <Pops pops={pops} text={t('carryPop')} onDone={removePop} />
+        <Pops pops={pops} onDone={removePop} />
         <span className="char-action">{t('carryAction')}</span>
       </button>
       <div className="char-bubble">
