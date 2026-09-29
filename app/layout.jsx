@@ -1,10 +1,26 @@
 import './globals.css';
 import { LanguageProvider } from '@/components/LanguageProvider';
 
+const description =
+  'Semua tentang Asuka Cheeda Jetto, dokter hewan virtual: profil, cover lagu, VETTALK, dan semua akun resminya di satu halaman.';
+
 export const metadata = {
+  // Absolute URLs for link previews. On Vercel, Next falls back to the production domain on its own.
+  metadataBase: process.env.NEXT_PUBLIC_SITE_URL ? new URL(process.env.NEXT_PUBLIC_SITE_URL) : undefined,
   title: 'Website Asuka Jetto',
-  description:
-    'Semua tentang Asuka Cheeda Jetto — profil, cover lagu, dan semua akun resminya dikumpulkan di satu halaman.',
+  description,
+  openGraph: {
+    type: 'website',
+    siteName: 'Website Asuka Jetto',
+    title: 'Website Asuka Jetto',
+    description,
+    locale: 'id_ID',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Website Asuka Jetto',
+    description,
+  },
   icons: {
     icon: [
       { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },

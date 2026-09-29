@@ -1,6 +1,7 @@
-# Asuka Cheeda Jetto — Fansite
+# Asuka Cheeda Jetto: Fansite
 
-Fansite tidak resmi. Next.js (App Router) + Framer Motion. **Tanpa API key.**
+Fansite tidak resmi untuk Asuka Cheeda Jetto. Next.js (App Router) + Framer Motion.
+Arah desain ada di [DESIGN.md](DESIGN.md), catatan audit desain di [anti-slop/](anti-slop/).
 
 ## Menjalankan
 
@@ -16,61 +17,75 @@ npm run build   # build produksi
 npm start       # jalankan hasil build
 ```
 
-## Kenapa tidak butuh API key
+## Environment
 
-Thumbnail YouTube diambil dari pola URL publik `img.youtube.com/vi/{ID}/maxresdefault.jpg`,
-dan pemutarnya pakai iframe embed biasa. Keduanya tidak butuh otorisasi apa pun.
-Konsekuensinya: daftar video **tidak** ter-update otomatis — ditulis manual di
-`lib/data.js`.
+Buat `.env.local` (tidak ikut ke git):
 
-## Menambah video baru
-
-Buka `lib/data.js`, tambahkan satu objek ke array `COVERS`:
-
-```js
-{
-  id: 'sg_06',                    // bebas, harus unik
-  yt: 'VIDEO_ID',                 // dari youtube.com/watch?v=VIDEO_ID
-  title: '【COVER】Judul Lagu',
-  duration: '3:24',
-  views: 1200,
-  author: '@asukajetto',
-  daysAgo: 3,                     // dipakai untuk urutan & label waktu
-}
+```bash
+YOUTUBE_API_KEY=...                        # opsional, lihat di bawah
+NEXT_PUBLIC_SITE_URL=https://domain-kamu   # opsional, untuk URL gambar preview link
 ```
 
-Urutan feed otomatis: `daysAgo` terkecil tampil duluan.
+Di Vercel, `NEXT_PUBLIC_SITE_URL` boleh dikosongkan: Next memakai domain produksi Vercel otomatis.
+
+## Data YouTube
+
+Dengan `YOUTUBE_API_KEY`, situs mengambil dari channel (cache 6 jam):
+
+- statistik channel (subscriber, views, jumlah video),
+- semua cover: upload yang judulnya **diawali** `【COVER】` (shorts ber-hashtag #cover tidak ikut),
+- semua VETTALK: upload yang judulnya mengandung `【VETTALK】`.
+
+Tanpa key, atau kalau API gagal, situs memakai daftar cadangan di `lib/data.js` (`COVERS`, `VETTALKS`)
+dan label statistik berubah jadi "dicatat manual".
+
+Topik VETTALK diambil dari judul (tag `【...】` dibuang). Judul yang ditulis kapital semua
+diubah jadi huruf kalimat, jadi singkatan seperti FIP bisa ikut kecil: tulis topik yang benar
+di `VETTALKS` (cocokkan `yt`), dan tulisan itu yang dipakai.
+
+## Kredit artis
+
+Isi `ART_CREDITS` di `lib/data.js`:
+
+```js
+{ work: { id: 'Ilustrasi hero', en: 'Hero illustration' }, file: 'hero.jpg', artist: 'Nama Artis', href: 'https://...' },
+```
+
+Baris dengan `artist` kosong tidak ditampilkan. Kredit muncul di footer begitu ada minimal satu nama.
 
 ## Mengubah teks / terjemahan
 
 Semua teks statis ada di `lib/i18n.js`, masing-masing punya versi `id` dan `en`.
-Tombol ID/EN di pojok kanan atas mengganti seluruh teks tanpa reload.
+Tombol ID/EN mengganti seluruh teks tanpa reload, dan pilihannya diingat di browser pengunjung.
 
 ## Struktur
 
 ```
 app/
-  layout.jsx        font, metadata, favicon
-  page.jsx          susunan section
-  globals.css       seluruh styling
+  layout.jsx            font, metadata, favicon, preview link
+  opengraph-image.jsx   gambar preview link (Discord, X, WhatsApp)
+  page.jsx              susunan section + ambil data YouTube
+  globals.css           seluruh styling
 components/
-  LanguageProvider  context bahasa (t / tf)
-  TopBar            bar atas, jam, tombol bahasa
-  Hero              banner + parallax
-  SocialLinks       grid akun sosmed
-  Masthead          headline + berkas pasien
-  Preferences       Bikin Happy / Bikin Badmood
-  Feed, VideoCard   daftar cover lagu
-  Reveal            wrapper animasi scroll
+  TopBar, Hero, Ticker  bagian atas
+  Masthead              sapaan + berkas dokter
+  CharacterIntro        Cheeda (bisa dielus) & Cipet (bisa digendong)
+  Preferences           hasil observasi: bikin happy / badmood
+  ChannelStats          statistik YouTube
+  Feed, VideoCard       cover lagu
+  Vettalk               playlist VETTALK
+  SupportLinks          Trakteer & Saweria
+  SocialLinks           akun sosmed
+  Footer, BackToTop     penutup + tombol paw ke atas
+  PawCursor, PawBurst   kursor paw & jejak kaki
 lib/
-  data.js           data video & sosmed
-  i18n.js           kamus terjemahan
-public/             gambar hero & favicon
+  data.js               data cadangan, sosmed, kredit artis
+  youtube.js            pengambilan data YouTube
+  i18n.js               kamus terjemahan
 ```
 
 ## Catatan
 
-- Kredit ilustrasi hero masih placeholder (`heroCredit` di `lib/i18n.js`).
-  Ganti dengan nama artist sebelum situs dipublikasikan.
-- Semua animasi otomatis nonaktif kalau pengguna mengaktifkan
-  "reduce motion" di sistem operasinya.
+- Semua animasi mati kalau pengunjung mengaktifkan "reduce motion" di perangkatnya.
+- Isi halaman tetap tampil walau JavaScript lambat atau mati (fallback di `globals.css`).
+- Font Archivo di `app/fonts/` (lisensi SIL OFL) hanya dipakai untuk gambar preview link.

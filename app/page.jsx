@@ -8,28 +8,41 @@ import Masthead from '@/components/Masthead';
 import CharacterIntro from '@/components/CharacterIntro';
 import Preferences from '@/components/Preferences';
 import Feed from '@/components/Feed';
+import Vettalk from '@/components/Vettalk';
 import Footer from '@/components/Footer';
-import { getLiveChannelStats } from '@/lib/youtube';
+import PawBurst from '@/components/PawBurst';
+import PawCursor from '@/components/PawCursor';
+import BackToTop from '@/components/BackToTop';
+import { getLiveChannelStats, getChannelVideos } from '@/lib/youtube';
 
 export default async function Home() {
-  const liveStats = await getLiveChannelStats();
+  const [liveStats, videos] = await Promise.all([getLiveChannelStats(), getChannelVideos()]);
+  // An empty API result falls back to the hand-kept lists in lib/data.js.
+  const covers = videos?.covers?.length ? videos.covers : undefined;
+  const vettalks = videos?.vettalks?.length ? videos.vettalks : undefined;
 
   return (
     <>
       <div className="pawlayer" aria-hidden="true" />
+      <PawBurst />
+      <PawCursor />
       <TopBar />
-      <Ticker />
       <Hero />
+      <Ticker />
       <div className="wrap">
-        <Masthead />
-        <CharacterIntro />
-        <Preferences />
-        <ChannelStats liveStats={liveStats} />
-        <Feed />
-        <SupportLinks />
-        <SocialLinks />
+        <main>
+          <Masthead />
+          <CharacterIntro />
+          <Preferences />
+          <ChannelStats liveStats={liveStats} />
+          <Feed covers={covers} />
+          <Vettalk episodes={vettalks} />
+          <SupportLinks />
+          <SocialLinks />
+        </main>
         <Footer />
       </div>
+      <BackToTop />
     </>
   );
 }

@@ -1,42 +1,35 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { SOCIALS } from '@/lib/data';
 import { useLang } from './LanguageProvider';
 import Reveal from './Reveal';
+import SectionHead from './SectionHead';
+import SocialIcon from './SocialIcon';
 
 export default function SocialLinks() {
   const { t } = useLang();
 
   return (
-    <section className="sectionbar sosmed">
-      <Reveal className="sectionbar-head">
-        <h2>{t('sosmedTitle')}</h2>
-        <span className="mono mut">{t('sosmedSub')}</span>
-      </Reveal>
+    <section className="sosmed">
+      <SectionHead no="07" title={t('sosmedTitle')} sub={t('sosmedSub')} />
 
-      <div className="relaylinks">
-        {SOCIALS.map((s, i) => (
-          <motion.a
+      <Reveal className="relaylinks" y={30}>
+        {SOCIALS.map((s) => (
+          <a
             key={s.name}
-            className="relaylink"
+            className="relaylink tactile"
             href={s.href}
             target="_blank"
             rel="noopener noreferrer"
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.45, delay: i * 0.05, ease: [0.2, 0.7, 0.3, 1] }}
-            whileHover={{ y: -3 }}
           >
-            <span>
+            <SocialIcon name={s.name} className="rl-icon" />
+            <span className="rl-text">
               <span className="rl-name">{s.name}</span>
               <span className="rl-sub">{t(s.key)}</span>
             </span>
-            <span className="rl-arrow">↗</span>
-          </motion.a>
+          </a>
         ))}
-      </div>
+      </Reveal>
     </section>
   );
 }

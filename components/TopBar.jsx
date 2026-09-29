@@ -1,39 +1,51 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll } from 'framer-motion';
 import { useLang } from './LanguageProvider';
+import Paw from './Paw';
+import { scrollToTop } from './BackToTop';
+
+const wib = new Intl.DateTimeFormat('en-GB', {
+  timeZone: 'Asia/Jakarta',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+});
 
 function Clock() {
   const [time, setTime] = useState(null);
 
   useEffect(() => {
-    const tick = () => {
-      const d = new Date();
-      setTime(
-        `${String(d.getHours()).padStart(2, '0')}.${String(d.getMinutes()).padStart(2, '0')} WIB`
-      );
-    };
+    const tick = () => setTime(`${wib.format(new Date()).replace(':', '.')} WIB`);
     tick();
     const int = setInterval(tick, 20000);
     return () => clearInterval(int);
   }, []);
 
-  // Rendered empty on the server so the markup matches the first client paint.
-  return <span className="relay">{time ?? '—'}</span>;
+  // Rendered as a neutral placeholder on the server so the markup matches the first client paint.
+  return <span className="relay">{time ?? '--.-- WIB'}</span>;
 }
 
 export default function TopBar() {
   const { lang, setLang, t } = useLang();
+  const { scrollYProgress } = useScroll();
 
   return (
-    <motion.div
-      className="bar"
-      initial={{ y: -40, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: [0.2, 0.7, 0.3, 1] }}
-    >
-      <span className="brand">{t('brand')}</span>
+    <div className="bar">
+      <motion.span className="bar-progress" style={{ scaleX: scrollYProgress }} aria-hidden="true" />
+      <a
+        className="brand"
+        href="#top"
+        title={t('brandHint')}
+        onClick={(e) => {
+          e.preventDefault();
+          scrollToTop();
+        }}
+      >
+        <Paw className="brand-paw" />
+        {t('brand')}
+      </a>
       <span className="spacer" />
       <Clock />
       <div className="langsw" role="group" aria-label="Language">
@@ -56,6 +68,6 @@ export default function TopBar() {
           </button>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }

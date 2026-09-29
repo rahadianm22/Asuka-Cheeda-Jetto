@@ -1,0 +1,32 @@
+# DESIGN.md: Website Asuka Jetto
+
+Transcribed from the owner's own direction (2026-09-28). The owner is the author; this file only records it.
+
+## Purpose
+A gift from Rahadian to Jetto (Asuka Cheeda Jetto, VTuber with a virtual vet-doctor persona).
+Owner's words: "buat seheboh mungkin dan tetap dalam design yg eye catching".
+
+## Identity
+- Concept (accepted by the owner): a vet clinic's records. Dark instrument-panel chrome, paper documents for the doctor's file, stamps, JT serial numbers, a WIB clock, paw prints.
+- Voice: Jetto's own persona lines, including her emoji and "~". Written copy stays hers.
+
+## Palette
+- Lavender `#c1a1cf` / `#dcc4e6` as the single accent; dark `#0c0812` / `#17111f` / `#1f1729`; paper `#ede6ec` with ink `#191221`.
+- Semantic only: green and amber for "Bikin Aku Happy" / "Bikin Aku Badmood". Pink `#f2a6c4` belongs to Cipet.
+
+## Typography
+- Archivo, stretched to its widest (`wdth` 118 to 125) for loud display text; normal width for reading.
+- JetBrains Mono for chart-label text (field names, indexes, metadata).
+
+## Owner decisions
+- The "Hasil observasi klinisku" section keeps its original look (dark panel, grid texture, soft rounded pills). Owner request, 2026-09-28. Improved at the owner's request on 2026-09-29: two columns (happy / badmood), a heart and a broken-heart badge, pills tilted like stickers that wiggle on hover, and "Kamu" highlighted as the first thing that makes Jetto happy.
+- Text stays at normal website sizes: no giant display type, because oversized text can be uncomfortable for some visitors. Largest heading about 96px (hero name), section titles about 40px. Owner request, 2026-09-28. The energy comes from motion, interaction and composition, not from type size.
+
+- "Dukung Jetto" has a transparent background (no lavender panel); its two links are dark tiles like the rest of the page. Owner request, 2026-09-28.
+
+- All section titles are left-aligned. Owner request, 2026-09-28. Section variety comes from layout and content, not title alignment.
+
+- "Website Asuka Jetto" in the top bar is a link back to the top, and a lavender paw button ("Ke atas") hops in near the bottom of the page. Owner request, 2026-09-29.
+- Artist credits are shown only once the owner fills in real names (`ART_CREDITS` in lib/data.js).
+
+Dial: ENERGY 2 / RHYTHM 3 / MOTION 3

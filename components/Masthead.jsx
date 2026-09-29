@@ -8,58 +8,74 @@ import Reveal from './Reveal';
 
 export default function Masthead() {
   const { t } = useLang();
+  // Keeps the "!" after the underlined name on the same line.
+  const after = t('mastH1b');
+  const punct = after.match(/^[!,.~]*/)[0];
 
   return (
     <section className="mast">
-      <div className="mast-left">
-        <Reveal className="mast-copy">
-          <h1>
-            {t('mastH1a')}
-            <em>{t('mastH1em')}</em>
-            {t('mastH1b')}
-          </h1>
-          <p className="sub">{t('mastSub')}</p>
-          <motion.a
-            className="cta"
-            href="#feed"
-            whileHover={{ y: -2, backgroundColor: '#dcc4e6' }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ duration: 0.18 }}
+      <Reveal className="mast-copy" y={40}>
+        <h2 className="mast-title">
+          {t('mastH1a')}
+          <span className="nowrap">
+            <em className="mark">
+              {t('mastH1em')}
+              <svg className="mark-line" viewBox="0 0 200 24" preserveAspectRatio="none" aria-hidden="true">
+                <motion.path
+                  d="M4 16 C 48 6, 104 22, 150 10 S 190 8, 196 12"
+                  initial={{ pathLength: 0 }}
+                  whileInView={{ pathLength: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.9, delay: 0.6, ease: 'easeOut' }}
+                />
+              </svg>
+            </em>
+            {punct}
+          </span>
+          {after.slice(punct.length)}
+        </h2>
+        <p className="sub">{t('mastSub')}</p>
+        <a className="cta" href="#feed">
+          {t('mastCta')}
+        </a>
+      </Reveal>
+
+      {/* Jetto holds a clipboard in this pose, so she stands beside her own patient file. */}
+      <motion.div
+        className="mast-pose"
+        initial={{ opacity: 0, x: -60, y: 30, rotate: -4 }}
+        whileInView={{ opacity: 1, x: 0, y: 0, rotate: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ type: 'spring', stiffness: 120, damping: 16, delay: 0.2 }}
+        aria-hidden="true"
+      >
+        <Image src="/pose.png" alt="" width={703} height={900} />
+      </motion.div>
+
+      <Reveal className="file-wrap" delay={0.12} y={50}>
+        <div className="file">
+          <motion.div
+            className="file-stamp"
+            aria-hidden="true"
+            initial={{ scale: 2, opacity: 0, rotate: -24 }}
+            whileInView={{ scale: 1, opacity: 1, rotate: -9 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ type: 'spring', stiffness: 520, damping: 20, delay: 0.7 }}
           >
-            {t('mastCta')}
-          </motion.a>
-        </Reveal>
-
-        <motion.div
-          className="mast-pose"
-          initial={{ opacity: 0, x: 40, y: 20 }}
-          whileInView={{ opacity: 1, x: 0, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.7, delay: 0.25, ease: [0.2, 0.7, 0.3, 1] }}
-          aria-hidden="true"
-        >
-          <Image src="/pose.png" alt="" width={703} height={900} priority={false} />
-        </motion.div>
-      </div>
-
-      <Reveal className="file" delay={0.12}>
-        <div className="eyebrow">{t('fileEyebrow')}</div>
-        <h3>Asuka Cheeda Jetto</h3>
-        <div className="binom">{t('fileBinom')}</div>
-        <dl className="rows">
-          {PROFILE_ROWS.map((row, i) => (
-            <motion.div
-              key={row.labelKey}
-              initial={{ opacity: 0, x: 10 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.2 + i * 0.05 }}
-            >
-              <dt>{t(row.labelKey)}</dt>
-              <dd>{row.valueKey ? t(row.valueKey) : row.value}</dd>
-            </motion.div>
-          ))}
-        </dl>
+            {t('fileStamp')}
+          </motion.div>
+          <div className="eyebrow">{t('fileEyebrow')}</div>
+          <h3>Asuka Cheeda Jetto</h3>
+          <div className="binom">{t('fileBinom')}</div>
+          <dl className="rows">
+            {PROFILE_ROWS.map((row) => (
+              <div key={row.labelKey}>
+                <dt>{t(row.labelKey)}</dt>
+                <dd>{row.valueKey ? t(row.valueKey) : row.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </Reveal>
     </section>
   );

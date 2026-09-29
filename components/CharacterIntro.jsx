@@ -1,62 +1,118 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence, useAnimationControls } from 'framer-motion';
 import { useLang } from './LanguageProvider';
+import SectionHead from './SectionHead';
 import Reveal from './Reveal';
 
-const CHARACTERS = [
-  {
-    id: 'cheeda',
-    img: '/cheeda.png',
-    accent: '#c1a1cf',
-    nameKey: 'cheedaName',
-    tagKey: 'cheedaTag',
-    lineKey: 'cheedaLine',
-  },
-  {
-    id: 'cipet',
-    img: '/cipet.png',
-    accent: '#f2a6c4',
-    nameKey: 'cipetName',
-    tagKey: 'cipetTag',
-    lineKey: 'cipetLine',
-  },
-];
+function Pops({ pops, text, onDone }) {
+  return (
+    <AnimatePresence>
+      {pops.map((id) => (
+        <motion.span
+          key={id}
+          className="char-pop"
+          aria-hidden="true"
+          initial={{ opacity: 1, y: 0, scale: 0.8 }}
+          animate={{ opacity: 0, y: -80, scale: 1.15 }}
+          transition={{ duration: 0.9, ease: 'easeOut' }}
+          onAnimationComplete={() => onDone(id)}
+        >
+          {text}
+        </motion.span>
+      ))}
+    </AnimatePresence>
+  );
+}
+
+function usePops() {
+  const [pops, setPops] = useState([]);
+  const add = () => setPops((p) => [...p, `${Date.now()}-${Math.random()}`]);
+  const remove = (id) => setPops((p) => p.filter((x) => x !== id));
+  return [pops, add, remove];
+}
+
+// Cheeda asks to have her head patted, so her portrait is a button that does exactly that.
+function Cheeda({ t, tf }) {
+  const [pats, setPats] = useState(0);
+  const [pops, addPop, removePop] = usePops();
+  const controls = useAnimationControls();
+
+  const pat = () => {
+    setPats((n) => n + 1);
+    addPop();
+    controls.start({
+      rotate: [0, -9, 8, -6, 4, 0],
+      scaleY: [1, 0.86, 1.06, 1],
+      transition: { duration: 0.6 },
+    });
+  };
+
+  return (
+    <div className="charrow" style={{ '--char-accent': '#c1a1cf' }}>
+      <button type="button" className="char-portrait" onClick={pat}>
+        <motion.img src="/cheeda.png" alt="" animate={controls} style={{ originY: 1 }} />
+        <Pops pops={pops} text={t('patPop')} onDone={removePop} />
+        <span className="char-action">{t('patAction')}</span>
+      </button>
+      <div className="char-bubble">
+        <div className="char-id">
+          <span className="char-name">{t('cheedaName')}</span>
+          <span className="char-tag">{t('cheedaTag')}</span>
+          <span className="char-count" aria-live="polite">
+            {pats > 0 ? tf('patCount', { n: pats }) : ''}
+          </span>
+        </div>
+        <p>{t('cheedaLine')}</p>
+      </div>
+    </div>
+  );
+}
+
+// Cipet always wants to be carried, so her portrait toggles being picked up.
+function Cipet({ t }) {
+  const [up, setUp] = useState(false);
+  const [pops, addPop, removePop] = usePops();
+
+  const toggle = () => {
+    if (!up) addPop();
+    setUp((v) => !v);
+  };
+
+  return (
+    <div className="charrow rev" style={{ '--char-accent': '#f2a6c4' }}>
+      <button type="button" className="char-portrait" aria-pressed={up} onClick={toggle}>
+        <motion.img
+          src="/cipet.png"
+          alt=""
+          animate={up ? { y: -26, rotate: -7, scale: 1.1 } : { y: 0, rotate: 0, scale: 1 }}
+          transition={{ type: 'spring', stiffness: 380, damping: 13 }}
+        />
+        <Pops pops={pops} text={t('carryPop')} onDone={removePop} />
+        <span className="char-action">{t('carryAction')}</span>
+      </button>
+      <div className="char-bubble">
+        <div className="char-id">
+          <span className="char-name">{t('cipetName')}</span>
+          <span className="char-tag">{t('cipetTag')}</span>
+        </div>
+        <p>{t('cipetLine')}</p>
+      </div>
+    </div>
+  );
+}
 
 export default function CharacterIntro() {
-  const { t } = useLang();
+  const { t, tf } = useLang();
 
   return (
     <section className="charintro">
-      <Reveal className="sectionbar-head">
-        <h2>{t('charEyebrow')}</h2>
-        <span className="mono mut">{t('charSub')}</span>
+      <SectionHead no="01" title={t('charEyebrow')} sub={t('charSub')} />
+      <Reveal className="charrow-list" y={40}>
+        <Cheeda t={t} tf={tf} />
+        <Cipet t={t} />
       </Reveal>
-
-      <div className="charrow-list">
-        {CHARACTERS.map((c, i) => (
-          <motion.div
-            key={c.id}
-            className={`charrow${i % 2 === 1 ? ' rev' : ''}`}
-            style={{ '--char-accent': c.accent }}
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.5, delay: i * 0.12, ease: [0.2, 0.7, 0.3, 1] }}
-          >
-            <div className="char-portrait">
-              <img src={c.img} alt="" />
-            </div>
-            <div className="char-bubble">
-              <div className="char-id">
-                <span className="char-name">{t(c.nameKey)}</span>
-                <span className="char-tag">{t(c.tagKey)}</span>
-              </div>
-              <p>{t(c.lineKey)}</p>
-            </div>
-          </motion.div>
-        ))}
-      </div>
     </section>
   );
 }
