@@ -20,8 +20,7 @@ Owner's words: "buat seheboh mungkin dan tetap dalam design yg eye catching".
 
 ## Owner decisions
 - The "Hasil observasi klinisku" section keeps its original look (dark panel, grid texture, soft rounded pills). Owner request, 2026-09-28. Improved at the owner's request on 2026-09-29: two columns (happy / badmood), a heart and a broken-heart badge, pills tilted like stickers that wiggle on hover, and "Kamu" highlighted as the first thing that makes Jetto happy.
-- Text stays at normal website sizes: no giant display type, because oversized text can be uncomfortable for some visitors. Section titles about 40px. Owner request, 2026-09-28. The energy comes from motion, interaction and composition, not from type size.
-- Exception: the hero "JETTO" name is restored to its original giant size (up to 280px) and the kicker above it to its original size (up to 32px). Owner request, 2026-10-01: the hero name is the one place that should stay big.
+- Text stays at normal website sizes everywhere, including the hero "JETTO" name (max 96px) and its kicker (max 17px): no giant display type, because oversized text can be uncomfortable for some visitors. Section titles about 40px. Owner request, 2026-09-28, reaffirmed 2026-10-01 after briefly trying a giant hero name. The energy comes from motion, interaction and composition, not from type size.
 
 - "Dukung Jetto" has a transparent background (no lavender panel); its two links are dark tiles like the rest of the page. Owner request, 2026-09-28.
 
