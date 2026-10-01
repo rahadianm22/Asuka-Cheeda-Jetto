@@ -120,14 +120,14 @@ body {
 .hero-title { display: flex; flex-direction: column; }
 .hero-kicker {
   display: block; margin-bottom: 0.2em;
-  font-size: clamp(13px, 1.4vw, 17px); font-weight: 700;
-  font-variation-settings: 'wdth' 115; letter-spacing: 0.08em; text-transform: uppercase;
+  font-size: clamp(16px, 2.6vw, 32px); font-weight: 700;
+  font-variation-settings: 'wdth' 125; letter-spacing: 0.06em; text-transform: uppercase;
   color: var(--lav-hi); text-shadow: 0 2px 16px rgba(12, 8, 18, 0.8);
 }
 .hero-name {
   display: flex;
-  font-size: clamp(44px, 7vw, 96px); font-weight: 800; line-height: 0.9;
-  font-variation-settings: 'wdth' 115; letter-spacing: -0.02em;
+  font-size: clamp(72px, 21.5vw, 280px); font-weight: 800; line-height: 0.82;
+  font-variation-settings: 'wdth' 125; letter-spacing: -0.03em;
   color: var(--paper); text-shadow: 0 6px 40px rgba(12, 8, 18, 0.6);
 }
 .hero-letter-mask { display: inline-block; overflow: hidden; padding-top: 0.14em; margin-top: -0.14em; }
