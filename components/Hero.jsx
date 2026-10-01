@@ -56,13 +56,25 @@ export default function Hero() {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.4, ease: EASE }}
       >
+        {/* Separate art direction per breakpoint, not just a scaled-down crop: the mobile
+            portrait source keeps her face and the grass readable on a narrow screen. */}
         <Image
           src="/hero.jpg"
           alt={t('heroAlt')}
           fill
           priority
-          sizes="100vw"
+          sizes="(max-width: 620px) 0px, 100vw"
+          className="hero-img-desktop"
           style={{ objectFit: 'cover', objectPosition: '70% 42%' }}
+        />
+        <Image
+          src="/hero-mobile.jpg"
+          alt={t('heroAlt')}
+          fill
+          priority
+          sizes="(max-width: 620px) 100vw, 0px"
+          className="hero-img-mobile"
+          style={{ objectFit: 'cover', objectPosition: '50% 30%' }}
         />
       </motion.div>
 
