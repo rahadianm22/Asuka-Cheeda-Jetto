@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { animate, motion, useInView, useReducedMotion } from 'framer-motion';
-import { CHANNEL_STATS, YOUTUBE_CHANNEL } from '@/lib/data';
+import { CHANNEL_STATS, YOUTUBE_CHANNEL, getTenure } from '@/lib/data';
 import { useLang } from './LanguageProvider';
 import SectionHead from './SectionHead';
 import SocialIcon from './SocialIcon';
@@ -19,6 +19,13 @@ const ICONS = {
     </svg>
   ),
   contents: <SocialIcon name="YouTube" className="ytstat-badge-icon" />,
+  tenure: (
+    <svg className="ytstat-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3.5" y="5" width="17" height="16" rx="2" />
+      <path d="M8 3v4M16 3v4M3.5 10h17" />
+      <path d="M8.5 14h1M12 14h1M15.5 14h1M8.5 17h1M12 17h1" />
+    </svg>
+  ),
 };
 
 // A heartbeat line under each number: the page's clinic theme, drawn once as the card appears.
@@ -69,14 +76,21 @@ function CountUp({ value }) {
 }
 
 export default function ChannelStats({ liveStats = null }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const isLive = Boolean(liveStats);
 
   // Live mode shows only what the API returned, so a hidden subscriber count
   // is dropped rather than filled with a stale hand-written number.
-  const stats = isLive
+  const apiStats = isLive
     ? CHANNEL_STATS.filter((s) => liveStats[s.key]).map((s) => ({ ...s, value: liveStats[s.key] }))
     : CHANNEL_STATS;
+
+  // Not from the API: computed locally from her real debut date, so it is never "manual".
+  const tenureStat = {
+    key: 'tenure', icon: 'tenure', value: getTenure(lang),
+    labelKey: 'ytStatTenure', noteKey: 'ytStatTenureNote',
+  };
+  const stats = [...apiStats, tenureStat];
 
   return (
     <section className="ytstats">
