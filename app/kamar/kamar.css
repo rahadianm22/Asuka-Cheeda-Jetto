@@ -1,0 +1,88 @@
+/* Scoped to .kamar-page (not :root / html / body) so nothing here leaks into the rest of
+   the site: this stylesheet is only loaded on /kamar, but variables and element selectors
+   on :root/html/body would otherwise apply document-wide for as long as it's loaded. */
+.kamar-page {
+  --bg: #0c0812; --panel: #17111f; --line: rgba(193, 161, 207, .22); --fg: #ede6ec; --mut: #8e7e9b;
+  --lav: #c1a1cf; --lav-hi: #dcc4e6; --pulse: #7be0b4;
+  --display: 'Archivo', system-ui, sans-serif; --mono: 'JetBrains Mono', ui-monospace, monospace;
+  color-scheme: dark;
+  position: fixed; inset: 0; overflow: hidden;
+  background: var(--bg); color: var(--fg); font-family: var(--display);
+}
+.kamar-page, .kamar-page * { box-sizing: border-box; }
+.kamar-page .stage { position: fixed; inset: 0; touch-action: none; cursor: grab; background: #0e0915; }
+.kamar-page .stage:active { cursor: grabbing; }
+.kamar-page canvas { display: block; width: 100%; height: 100%; }
+.kamar-page .shade {
+  position: fixed; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(12, 8, 18, .72) 0, rgba(12, 8, 18, 0) 26%),
+    linear-gradient(0deg, rgba(12, 8, 18, .78) 0, rgba(12, 8, 18, 0) 24%);
+}
+.kamar-page .top {
+  position: fixed; left: 0; right: 0; top: 0; padding: 18px 24px;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; pointer-events: none;
+}
+.kamar-page .top > * { pointer-events: auto; }
+.kamar-page .kamar-back {
+  display: inline-block; margin-bottom: 10px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--mut); text-decoration: none; transition: color .15s;
+}
+.kamar-page .kamar-back:hover { color: var(--lav-hi); }
+.kamar-page .kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--mut); }
+.kamar-page h1 { margin: 6px 0 0; font-size: clamp(28px, 5vw, 52px); line-height: 1; font-weight: 800; font-variation-settings: 'wdth' 88; letter-spacing: -.02em; text-wrap: balance; }
+.kamar-page h1 em { font-style: normal; color: var(--lav); }
+.kamar-page .status { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--pulse); padding-top: 6px; white-space: nowrap; }
+.kamar-page .status i { width: 8px; height: 8px; border-radius: 50%; background: var(--pulse); box-shadow: 0 0 0 4px rgba(123, 224, 180, .15); }
+.kamar-page .dock { position: fixed; left: 0; right: 0; bottom: 0; padding: 16px 24px calc(18px + env(safe-area-inset-bottom)); display: grid; justify-items: center; gap: 10px; pointer-events: none; }
+.kamar-page .dock > * { pointer-events: auto; }
+.kamar-page .hint { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--mut); text-align: center; }
+.kamar-page .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.kamar-page button {
+  font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--fg); background: rgba(23, 17, 31, .82); backdrop-filter: blur(6px);
+  border: 1px solid var(--line); padding: 11px 16px; border-radius: 2px; cursor: pointer;
+  transition: border-color .15s, background .15s, color .15s;
+}
+.kamar-page button:hover { border-color: var(--lav); color: var(--lav-hi); }
+.kamar-page button[aria-pressed='true'] { background: var(--lav); border-color: var(--lav); color: #0c0812; }
+.kamar-page button:focus-visible { outline: 2px solid var(--lav-hi); outline-offset: 2px; }
+.kamar-page .bubble {
+  position: absolute; left: 0; top: 0; transform: translate(-50%, -100%) scale(.9); opacity: 0;
+  background: var(--fg); color: #191221; font-weight: 800; font-size: 15px; padding: 7px 12px; border-radius: 12px;
+  transition: opacity .18s, transform .18s; pointer-events: none; white-space: nowrap;
+}
+.kamar-page .bubble::after { content: ''; position: absolute; left: 50%; bottom: -6px; margin-left: -6px; border: 6px solid transparent; border-top-color: var(--fg); border-bottom: 0; }
+.kamar-page .bubble.on { opacity: 1; transform: translate(-50%, -100%) scale(1); }
+.kamar-page .drawer {
+  position: fixed; right: 0; top: 0; bottom: 0; width: min(340px, 100%); background: var(--panel);
+  border-left: 1px solid var(--line); padding: 24px; display: grid; gap: 12px; align-content: start;
+  transform: translateX(100%); transition: transform .25s; overflow: auto; z-index: 5;
+}
+.kamar-page .drawer.on { transform: none; }
+.kamar-page .drawer h2 { margin: 0; font-family: var(--mono); font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--lav-hi); }
+.kamar-page .drawer .close { justify-self: end; margin-bottom: -8px; }
+.kamar-page ul { list-style: none; margin: 0; padding: 0; display: grid; }
+.kamar-page li { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.kamar-page li span:first-child { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--mut); padding-top: 3px; }
+.kamar-page li span:last-child { text-align: right; }
+.kamar-page .note { font-size: 13px; color: var(--mut); line-height: 1.55; margin: 0; }
+.kamar-page .lightbox {
+  position: fixed; inset: 0; z-index: 10; background: rgba(12, 8, 18, .9);
+  display: grid; place-items: center; align-content: center; gap: 10px; padding: 16px;
+  opacity: 0; pointer-events: none; transition: opacity .2s; cursor: pointer;
+}
+.kamar-page .lightbox.on { opacity: 1; pointer-events: auto; }
+.kamar-page .lightbox img { max-width: 100%; max-height: calc(100% - 30px); border: 1px solid var(--line); }
+.kamar-page .lightbox span { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--mut); }
+@media (max-width: 600px) {
+  .kamar-page .top { padding: 14px 16px; }
+  .kamar-page .dock { padding-inline: 16px; }
+  .kamar-page .hint { font-size: 9px; letter-spacing: .08em; }
+  .kamar-page .controls button { flex: 1 1 auto; padding: 12px 10px; }
+  .kamar-page .status { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kamar-page .bubble, .kamar-page .drawer, .kamar-page .lightbox { transition: none; }
+}

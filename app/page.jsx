@@ -9,6 +9,7 @@ import CharacterIntro from '@/components/CharacterIntro';
 import Preferences from '@/components/Preferences';
 import Feed from '@/components/Feed';
 import Vettalk from '@/components/Vettalk';
+import GamingRoom from '@/components/GamingRoom';
 import Footer from '@/components/Footer';
 import PawBurst from '@/components/PawBurst';
 import PawCursor from '@/components/PawCursor';
@@ -39,6 +40,7 @@ export default async function Home() {
           <Vettalk episodes={vettalks} />
           <SupportLinks />
           <SocialLinks />
+          <GamingRoom />
         </main>
         <Footer />
       </div>

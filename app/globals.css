@@ -696,6 +696,10 @@ body {
   letter-spacing: 0.1em; color: var(--mut); text-transform: uppercase;
 }
 
+/* ---------- gaming room teaser: links out to the fullscreen 3D diorama at /kamar ---------- */
+.room-teaser { margin-top: 140px; }
+.room-teaser-cta { margin-top: 4px; }
+
 /* ---------- footer ---------- */
 footer { margin-top: 120px; border-top: 1px solid var(--line-2); }
 .foot-woof {
@@ -890,7 +894,7 @@ html:not(.hydrated) .mark-line path { stroke-dasharray: none; stroke-dashoffset:
   .card { grid-column: span 6; }
   .card.featured { grid-column: span 12; grid-row: auto; }
   .relaylinks { grid-template-columns: repeat(3, 1fr); }
-  .charintro, .vitals-section, .ytstats, .feed-section, .vettalk, .support-panel { margin-top: 96px; }
+  .charintro, .vitals-section, .ytstats, .feed-section, .vettalk, .support-panel, .room-teaser { margin-top: 96px; }
   .vt-layout { grid-template-columns: 1fr; }
   .vt-list { contain: none; overflow-y: visible; }
   .vgroups { grid-template-columns: 1fr; }

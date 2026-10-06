@@ -31,5 +31,6 @@ Owner's words: "buat seheboh mungkin dan tetap dalam design yg eye catching".
 - "Website Asuka Jetto" in the top bar is a link back to the top, and a lavender paw button ("Ke atas") hops in near the bottom of the page. Owner request, 2026-09-29.
 - All character art and illustrations come from Jetto herself; the footer states that ownership instead of per-artist credits. Owner confirmation, 2026-09-29.
 - The 404 page is the clinic's "patient not found" chart, with Cheeda peeking over the corner.
+- A 3D Three.js diorama of Jetto's night gaming room, ported from a separate prototype project ("Kamar Main Malam"), lives at its own route `/kamar` rather than inline on the homepage, so the drag-to-orbit canvas never fights the page's own scroll and Three.js only loads for visitors who click through. Linked from a "No. 08" teaser section at the bottom of the homepage with the CTA "Lihat Gaming Room ku". Owner trial, 2026-10-06.
 
 Dial: ENERGY 2 / RHYTHM 3 / MOTION 3
