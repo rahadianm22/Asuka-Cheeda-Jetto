@@ -76,6 +76,25 @@ body {
 .bar .spacer { flex: 1; }
 .relay { display: flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; color: var(--mut); }
 
+/* Music toggle: the song title with a note, which turns into bouncing equalizer bars while it plays. */
+.musicbtn {
+  position: relative; display: inline-flex; align-items: center; gap: 7px;
+  height: 34px; min-width: 44px; padding: 0 11px; margin-left: 14px; white-space: nowrap;
+  font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  background: transparent; color: var(--mut); border: 1px solid var(--line); border-radius: var(--r);
+  cursor: pointer; transition: color 0.16s, background 0.16s;
+}
+.musicbtn::after { content: ''; position: absolute; inset: -6px 0; }
+.musicbtn:hover { color: var(--lav-hi); }
+.musicbtn[aria-pressed='true'] { background: var(--lav); color: var(--screen); border-color: var(--lav); }
+.musicbtn-note { width: 14px; height: 14px; flex: none; }
+.musicbtn-eq { display: flex; align-items: flex-end; justify-content: center; gap: 2px; width: 14px; height: 12px; flex: none; }
+.musicbtn-eq i { width: 2px; height: 3px; background: currentColor; border-radius: 1px; }
+.musicbtn-eq i { animation: eq 0.9s ease-in-out infinite; }
+.musicbtn-eq i:nth-child(2) { animation-delay: -0.3s; }
+.musicbtn-eq i:nth-child(3) { animation-delay: -0.6s; }
+@keyframes eq { 0%, 100% { height: 3px; } 50% { height: 12px; } }
+
 .langsw { display: flex; border: 1px solid var(--line); border-radius: var(--r); margin-left: 14px; }
 .langbtn {
   font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; font-weight: 700;
@@ -912,7 +931,11 @@ html:not(.hydrated) .mark-line path { stroke-dasharray: none; stroke-dashoffset:
   .bar { gap: 12px; padding: 11px 14px; }
   .bar .brand { letter-spacing: 0.08em; white-space: nowrap; }
   .relay { white-space: nowrap; }
-  .langsw { margin-left: 0; }
+  .langsw, .musicbtn { margin-left: 0; }
+  /* brand, music and language don't fit beside the clock on a phone, and the clock matters least */
+  .bar .relay { display: none; }
+  /* still too tight for the song title beside the brand: the note alone, named by its aria-label */
+  .bar .musicbtn-title { display: none; }
   .file:hover { transform: none; }
   .card { grid-column: span 12; }
   .relaylinks { grid-template-columns: 1fr 1fr; }

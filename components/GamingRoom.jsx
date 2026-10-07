@@ -23,7 +23,7 @@ export default function GamingRoom() {
 
   return (
     <section className="room-teaser">
-      <SectionHead no="08" icon={<GamepadIcon className="shead-icon" />} title={t('roomTitle')} sub={t('roomSub')} />
+      <SectionHead no="08" title={t('roomTitle')} sub={t('roomSub')} />
       <Reveal y={30}>
         <Link href="/kamar" className="cta room-teaser-cta">
           <GamepadIcon className="cta-icon" />

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion, useScroll } from 'framer-motion';
 import { useLang } from './LanguageProvider';
 import Paw from './Paw';
+import MusicToggle from './MusicToggle';
 import { scrollToTop } from './BackToTop';
 
 const wib = new Intl.DateTimeFormat('en-GB', {
@@ -50,6 +51,7 @@ export default function TopBar() {
       </a>
       <span className="spacer" />
       <Clock />
+      <MusicToggle />
       <div className="langsw" role="group" aria-label="Language">
         {['id', 'en'].map((code) => (
           <button
