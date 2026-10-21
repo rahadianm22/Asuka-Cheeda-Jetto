@@ -1,7 +1,34 @@
 'use client';
 
-import { COPY, fmt } from '@/lib/merch-copy';
+import { useId, useState } from 'react';
+import { COPY, fmt, getStockLabel } from '@/lib/merch-copy';
 import { rp, lineKey } from '@/lib/po-core';
+
+// "OTS" explains itself: a tooltip that opens on hover, on keyboard focus and on tap, and closes with Escape.
+function OtsHint() {
+  const [open, setOpen] = useState(false);
+  const id = useId();
+  return (
+    <span className="m-ots-wrap">
+      <button
+        type="button"
+        className="m-ots"
+        aria-describedby={id}
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+        onClick={() => setOpen((v) => !v)}
+        onKeyDown={(e) => e.key === 'Escape' && setOpen(false)}
+      >
+        {COPY.ots}
+      </button>
+      <span id={id} role="tooltip" className={`m-ots-tip${open ? ' is-open' : ''}`}>
+        {COPY.otsTip}
+      </span>
+    </span>
+  );
+}
 
 export default function ProductCard({ p, cart, size, onSize, onChange }) {
   const sizes = p.sizes || null;
@@ -13,26 +40,22 @@ export default function ProductCard({ p, cart, size, onSize, onChange }) {
   const soldOut = p.stock <= 0;
   const incOff = soldOut || used >= p.stock;
 
-  let stockText;
-  let stockClass = 'm-stock';
-  if (soldOut) {
-    stockText = COPY.stockOut;
-    stockClass += ' is-out';
-  } else if (p.stock <= 10) {
-    stockText = fmt(COPY.stockLow, { n: left, m: p.stock });
-    stockClass += ' is-low';
-  } else {
-    stockText = fmt(COPY.stockOk, { n: left });
-    stockClass += ' is-ok';
-  }
+  const stock = getStockLabel(left, soldOut);
 
   return (
-    <article className={`m-card${used > 0 ? ' is-picked' : ''}${soldOut ? ' is-out' : ''}`}>
+    <article
+      className={`m-card${used > 0 ? ' is-picked' : ''}${soldOut ? ' is-out' : ''}`}
+      style={p.tilt ? { '--rot': `${p.tilt.rest}deg`, '--rot-hover': `${p.tilt.hover}deg` } : undefined}
+    >
       <div className="m-card-photo">
         <span className="m-stage-floor" aria-hidden="true" />
         <span className="m-stage-shadow" aria-hidden="true" />
         {p.img ? (
-          <img className="m-stage-img" src={p.img} alt={p.name} width={840} height={840} loading="lazy" decoding="async" />
+          <>
+            <img className="m-stage-img" src={p.img} alt={p.name} width={840} height={840} loading="lazy" decoding="async" />
+            {/* Lenticular cards flip to a second picture while hovered. */}
+            {p.imgHover && <img className="m-stage-img m-stage-alt" src={p.imgHover} alt="" width={840} height={840} loading="lazy" decoding="async" aria-hidden="true" />}
+          </>
         ) : (
           <div className="m-card-nophoto" role="img" aria-label={`${COPY.photoMissing}: ${p.name}`}>
             <span>[FOTO]</span>
@@ -51,15 +74,16 @@ export default function ProductCard({ p, cart, size, onSize, onChange }) {
       <div className="m-card-info">
         <span className="m-sku">{p.sku}</span>
         <h3>{p.name}</h3>
+        <p className="m-tagline" title={p.tagline || undefined}>{p.tagline}</p>
         <div className="m-price">
           <strong>{rp(p.po)}</strong>
           {p.ots > p.po && (
             <span>
-              <s>{rp(p.ots)}</s> {COPY.ots}
+              <s>{rp(p.ots)}</s> <OtsHint />
             </span>
           )}
         </div>
-        <span className={stockClass}>{stockText}</span>
+        <span className={`m-stock is-${stock.tone}`}>{stock.text}</span>
       </div>
 
       {sizes && (
@@ -82,7 +106,7 @@ export default function ProductCard({ p, cart, size, onSize, onChange }) {
 
       <div className="m-stepper-row">
         <span>{sizes ? fmt(COPY.qtySize, { size: activeSize }) : COPY.qty}</span>
-        <div className="m-stepper">
+        <div className="m-stepper" title={COPY.qtyHint}>
           <button
             type="button"
             disabled={qty === 0}

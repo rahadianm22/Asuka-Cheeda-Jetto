@@ -67,6 +67,7 @@ export default function Summary({ priced, method, canReview, onReview, adminWa }
               <dd>{rp(subtotal)}</dd>
             </div>
           </dl>
+          {method === 'kirim' && <p className="m-ship-note" role="note">{COPY.shipNote}</p>}
         </div>
 
         <button type="button" className="m-btn-primary" disabled={!canReview} onClick={onReview}>

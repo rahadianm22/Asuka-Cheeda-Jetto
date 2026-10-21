@@ -127,6 +127,7 @@ export default function ReviewDialog({ priced, contact, method, address, onClose
             <dd>{rp(subtotal)}</dd>
           </div>
         </dl>
+        {method === 'kirim' && <p className="m-ship-note m-ship-note-dialog" role="note">{COPY.shipNote}</p>}
 
         <p className="m-dialog-pay">{method === 'kirim' ? COPY.rvPayNoteShip : COPY.rvPayNote}</p>
         {error && (
