@@ -30,7 +30,7 @@
 .m-sans { font-family: var(--sans); font-weight: 600; }
 
 /* ---------- buttons ---------- */
-.m-btn-primary, .m-btn-outline, .m-btn-ghost, .m-btn-dark, .m-btn-line-dark {
+.m-btn-primary, .m-btn-outline, .m-btn-ghost, .m-btn-solid, .m-btn-dark, .m-btn-line-dark {
   min-height: 48px; padding: 0 22px; border-radius: var(--r); font-weight: 800; cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none;
   transition: transform 0.16s, opacity 0.16s;
@@ -41,6 +41,8 @@
 .m-btn-outline { min-height: 52px; background: transparent; color: var(--ink); border: 1px solid var(--ink); font-weight: 700; }
 .m-btn-ghost { background: transparent; color: #c6b7ce; border: 1px solid rgba(193, 161, 207, 0.3); font-weight: 600; width: 100%; }
 .m-btn-ghost:hover { color: var(--paper); border-color: var(--lav); }
+.m-btn-solid { width: 100%; background: var(--lav); color: var(--ink); border: 0; font-weight: 800; }
+.m-btn-solid:hover { background: var(--lav-hi); }
 .m-btn-dark { min-height: 44px; flex: 1; background: var(--lav); color: var(--ink); border: 0; font-size: 14px; font-weight: 700; }
 .m-btn-line-dark { min-height: 44px; min-width: 72px; padding: 0 14px; background: transparent; color: var(--paper); border: 1px solid rgba(193, 161, 207, 0.5); font-family: var(--mono); font-size: 12px; font-weight: 400; }
 

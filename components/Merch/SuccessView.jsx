@@ -338,7 +338,7 @@ export default function SuccessView({ order, onAnother }) {
             </p>
           </div>
 
-          <a className="m-btn-ghost" href="/">
+          <a className="m-btn-solid" href="/">
             Balik ke beranda
           </a>
           <button type="button" className="m-btn-ghost" onClick={onAnother}>
