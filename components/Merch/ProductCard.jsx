@@ -27,10 +27,12 @@ export default function ProductCard({ p, cart, size, onSize, onChange }) {
   }
 
   return (
-    <article className={`m-card${used > 0 ? ' is-picked' : ''}`}>
+    <article className={`m-card${used > 0 ? ' is-picked' : ''}${soldOut ? ' is-out' : ''}`}>
       <div className="m-card-photo">
+        <span className="m-stage-floor" aria-hidden="true" />
+        <span className="m-stage-shadow" aria-hidden="true" />
         {p.img ? (
-          <img src={p.img} alt={p.name} width={600} height={600} loading="lazy" decoding="async" />
+          <img className="m-stage-img" src={p.img} alt={p.name} width={840} height={840} loading="lazy" decoding="async" />
         ) : (
           <div className="m-card-nophoto" role="img" aria-label={`${COPY.photoMissing}: ${p.name}`}>
             <span>[FOTO]</span>
@@ -38,6 +40,7 @@ export default function ProductCard({ p, cart, size, onSize, onChange }) {
           </div>
         )}
         <span className="m-chip-type">{p.type}</span>
+        {used > 0 && <span className="m-chip-cart">{fmt(COPY.inCart, { n: used })}</span>}
         {soldOut && (
           <span className="m-soldout" aria-hidden="true">
             <span>{COPY.soldOut}</span>
