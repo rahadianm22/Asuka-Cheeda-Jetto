@@ -106,12 +106,22 @@ export default function SuccessView({ order, onAnother }) {
     }
   }
 
-  const waText = `Halo admin, aku ${order.nama}. Nomor PO-ku ${order.noPO}.`;
-  const steps = [
-    ['Datang ke booth Jetto', ` di CF23 antara jam ${EVENT.hoursLabel.replace(' – ', ' dan ').replace(' WIB', '')} WIB.`],
-    ['Tunjukin tiket PO', ' (nomor PO + nama) ke kasir booth.'],
-    ['Bayar pakai QRIS booth', ` sejumlah ${rp(order.total)}, terus merch langsung dibawa pulang. Pat pat~`],
-  ];
+  // Delivery orders are not paid at the booth: the admin checks the shipping cost and follows up on WhatsApp.
+  const shipped = order.metode === 'kirim';
+  const waText = shipped
+    ? `Halo admin, aku ${order.nama}. Nomor PO-ku ${order.noPO}, mau tanya soal ongkir & pembayaran.`
+    : `Halo admin, aku ${order.nama}. Nomor PO-ku ${order.noPO}.`;
+  const steps = shipped
+    ? [
+        ['Admin cek ongkir', ' ke alamat yang kamu isi.'],
+        ['Kamu dikabarin lewat WhatsApp', ' soal total + ongkir dan cara bayarnya. Pastikan nomornya aktif, ya.'],
+        ['Bayar sesuai arahan admin', ', terus merch dikirim ke alamatmu. Pat pat~'],
+      ]
+    : [
+        ['Datang ke booth Jetto', ` di CF23 antara jam ${EVENT.hoursLabel.replace(' – ', ' dan ').replace(' WIB', '')} WIB.`],
+        ['Tunjukin tiket PO', ' (nomor PO + nama) ke kasir booth.'],
+        ['Bayar pakai QRIS booth', ` sejumlah ${rp(order.total)}, terus merch langsung dibawa pulang. Pat pat~`],
+      ];
 
   return (
     <div className="m-success">
@@ -124,22 +134,26 @@ export default function SuccessView({ order, onAnother }) {
         </li>
         <li className="is-now" aria-current="step">
           <span className="m-dot">2</span>
-          02 · Datang ke booth CF23
+          {shipped ? '02 · Konfirmasi admin' : '02 · Datang ke booth CF23'}
         </li>
         <li>
           <span className="m-dot m-dot-off">3</span>
-          03 · Bayar &amp; ambil merch
+          {shipped ? '03 · Bayar & merch dikirim' : '03 · Bayar & ambil merch'}
         </li>
       </ol>
 
       <div className="m-success-cols">
         <section className="m-pass-panel" aria-labelledby="m-booth-title">
           <div className="m-pass-head">
-            <span className="m-kicker m-kicker-lav">Bayar di tempat</span>
+            <span className="m-kicker m-kicker-lav">{shipped ? 'Tinggal tunggu kabar' : 'Bayar di tempat'}</span>
             <h1 id="m-booth-title" ref={titleRef} tabIndex={-1}>
-              Sampai jumpa di booth CF23~
+              {shipped ? 'Admin segera kabarin kamu~' : 'Sampai jumpa di booth CF23~'}
             </h1>
-            <span>Merch kamu udah dicatat &amp; disisihin. Bayarnya nanti langsung di booth pakai QRIS booth, harga PO tetap berlaku.</span>
+            <span>
+              {shipped
+                ? 'Merch kamu udah dicatat & disisihin. Admin bakal cek ongkir ke alamatmu, lalu kabarin total + ongkir dan cara bayarnya lewat WhatsApp. Harga PO tetap berlaku.'
+                : 'Merch kamu udah dicatat & disisihin. Bayarnya nanti langsung di booth pakai QRIS booth, harga PO tetap berlaku.'}
+            </span>
           </div>
 
           <div className="m-pass-body">
@@ -148,11 +162,11 @@ export default function SuccessView({ order, onAnother }) {
               <div className="m-ticket-frame" ref={ticketRef}>
                 <div className="m-ticket">
                   <div className="m-ticket-top">
-                    <span className="m-kicker">Tiket ambil PO</span>
-                    <span className="m-chip-dark">CF23</span>
+                    <span className="m-kicker">{shipped ? 'Nomor pesanan PO' : 'Tiket ambil PO'}</span>
+                    <span className="m-chip-dark">{shipped ? 'KIRIM' : 'CF23'}</span>
                   </div>
                   <div className="m-ticket-mid">
-                    <span className="m-ticket-hint">Tunjukin nomor ini ke kasir booth</span>
+                    <span className="m-ticket-hint">{shipped ? 'Sebutin nomor ini kalau tanya admin' : 'Tunjukin nomor ini ke kasir booth'}</span>
                     <span className="m-ticket-no">#{order.noPO}</span>
                     <span className="m-ticket-name">a.n. {order.nama}</span>
                   </div>
@@ -180,17 +194,26 @@ export default function SuccessView({ order, onAnother }) {
                     </div>
                     <div>
                       <dt>Ongkir</dt>
-                      <dd>Rp0</dd>
+                      <dd>{shipped ? 'menyusul via WA' : 'Rp0'}</dd>
                     </div>
                   </dl>
                   <div className="m-ticket-pay">
-                    <span>Bayar di booth</span>
+                    <span>{shipped ? 'Total merch' : 'Bayar di booth'}</span>
                     <strong>{rp(order.total)}</strong>
                   </div>
                   <div className="m-ticket-foot">
-                    <span>Booth {EVENT.booth} · {EVENT.venue}</span>
-                    <span>{EVENT.daysLabel}</span>
-                    <span>Jam ambil {EVENT.hoursLabel}</span>
+                    {shipped ? (
+                      <>
+                        <span>Dikirim ke:</span>
+                        <span>{order.alamat}</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Booth {EVENT.booth} · {EVENT.venue}</span>
+                        <span>{EVENT.daysLabel}</span>
+                        <span>Jam ambil {EVENT.hoursLabel}</span>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -214,12 +237,20 @@ export default function SuccessView({ order, onAnother }) {
 
             <div className="m-pass-side">
               <dl className="m-facts">
-                {[
-                  ['Booth', EVENT.booth],
-                  ['Hari', EVENT.daysLabel],
-                  ['Jam ambil', EVENT.hoursLabel],
-                  ['Lokasi', EVENT.venue],
-                ].map(([k, v]) => (
+                {(shipped
+                  ? [
+                      ['Pengambilan', 'Dikirim ke alamat'],
+                      ['Ongkir', 'Dicek admin'],
+                      ['Kabar via', `WhatsApp ${order.whatsapp ? '+' + order.whatsapp : ''}`.trim()],
+                      ['Status', 'Menunggu admin'],
+                    ]
+                  : [
+                      ['Booth', EVENT.booth],
+                      ['Hari', EVENT.daysLabel],
+                      ['Jam ambil', EVENT.hoursLabel],
+                      ['Lokasi', EVENT.venue],
+                    ]
+                ).map(([k, v]) => (
                   <div key={k}>
                     <dt>{k}</dt>
                     <dd>{v}</dd>
@@ -246,10 +277,16 @@ export default function SuccessView({ order, onAnother }) {
               <path d="M12 8v4" />
               <path d="M12 16h.01" />
             </svg>
-            <p>
-              <strong>Pesanan disimpan sampai {EVENT.pickupDeadlineLabel}.</strong> Lewat dari itu, merch bisa dilepas ke pembeli OTS.
-              {ADMIN_WA ? ' Kalau berhalangan, kabarin admin lewat WhatsApp, ya.' : ' Kalau berhalangan, kabarin admin ya.'}
-            </p>
+            {shipped ? (
+              <p>
+                <strong>Pastikan WhatsApp-mu aktif.</strong> Pesanan baru diproses setelah admin kabarin ongkir dan kamu konfirmasi. Salah alamat? Kabarin admin secepatnya.
+              </p>
+            ) : (
+              <p>
+                <strong>Pesanan disimpan sampai {EVENT.pickupDeadlineLabel}.</strong> Lewat dari itu, merch bisa dilepas ke pembeli OTS.
+                {ADMIN_WA ? ' Kalau berhalangan, kabarin admin lewat WhatsApp, ya.' : ' Kalau berhalangan, kabarin admin ya.'}
+              </p>
+            )}
           </div>
 
           <div className="m-pass-links">
@@ -261,15 +298,17 @@ export default function SuccessView({ order, onAnother }) {
                 Hubungi admin via WhatsApp
               </a>
             )}
-            <button type="button" onClick={() => saveCalendar(order)}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <rect x="3" y="5" width="18" height="16" rx="1" />
-                <path d="M16 3v4" />
-                <path d="M8 3v4" />
-                <path d="M3 11h18" />
-              </svg>
-              Simpan ke kalender
-            </button>
+            {!shipped && (
+              <button type="button" onClick={() => saveCalendar(order)}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <rect x="3" y="5" width="18" height="16" rx="1" />
+                  <path d="M16 3v4" />
+                  <path d="M8 3v4" />
+                  <path d="M3 11h18" />
+                </svg>
+                Simpan ke kalender
+              </button>
+            )}
           </div>
         </section>
 
@@ -307,7 +346,7 @@ export default function SuccessView({ order, onAnother }) {
               </div>
               <div>
                 <dt>Pengambilan</dt>
-                <dd>Ambil di CF23</dd>
+                <dd>{shipped ? 'Dikirim' : 'Ambil di CF23'}</dd>
               </div>
               <div>
                 <dt>Hemat vs OTS</dt>
@@ -315,14 +354,14 @@ export default function SuccessView({ order, onAnother }) {
               </div>
               <div>
                 <dt>Ongkir</dt>
-                <dd>Rp0</dd>
+                <dd>{shipped ? 'menyusul via WA' : 'Rp0'}</dd>
               </div>
               <div>
                 <dt>Status bayar</dt>
-                <dd className="m-saving">Bayar di booth</dd>
+                <dd className="m-saving">{shipped ? 'Menunggu konfirmasi admin' : 'Bayar di booth'}</dd>
               </div>
               <div className="m-sum-total">
-                <dt>Total</dt>
+                <dt>{shipped ? 'Total merch' : 'Total'}</dt>
                 <dd>{rp(order.total)}</dd>
               </div>
             </dl>
@@ -334,7 +373,8 @@ export default function SuccessView({ order, onAnother }) {
               <circle cx="12" cy="12" r="3" />
             </svg>
             <p>
-              <strong>Screenshot halaman ini, ya!</strong> Nomor PO dipakai kasir buat nyari pesananmu di booth.
+              <strong>Screenshot halaman ini, ya!</strong>{' '}
+              {shipped ? 'Nomor PO dipakai admin buat nyari pesananmu.' : 'Nomor PO dipakai kasir buat nyari pesananmu di booth.'}
             </p>
           </div>
 

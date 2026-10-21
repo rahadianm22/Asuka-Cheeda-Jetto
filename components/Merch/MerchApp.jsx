@@ -312,15 +312,25 @@ export default function MerchApp({ products: initialProducts, status }) {
 
             <SectionBox letter="C" title={COPY.secMethod} tag={<span className="m-box-tag">{COPY.secMethodTag}</span>}>
               <div className="m-methods" role="radiogroup" aria-label={COPY.secMethod}>
-                <label className="m-method is-off" aria-disabled="true">
-                  <input type="radio" name="metode" value="kirim" disabled checked={method === 'kirim'} onChange={() => setMethod('kirim')} />
-                  <span>
-                    <strong>{COPY.methodShip}</strong>
-                    <span>{COPY.methodShipSoon}</span>
-                    <em>{COPY.methodShipOff}</em>
-                  </span>
-                </label>
-                <label className="m-method is-on">
+                {SHIPPING_ENABLED ? (
+                  <label className={`m-method${method === 'kirim' ? ' is-on' : ''}`}>
+                    <input type="radio" name="metode" value="kirim" checked={method === 'kirim'} onChange={() => setMethod('kirim')} />
+                    <span>
+                      <strong>{COPY.methodShip}</strong>
+                      <span>{COPY.methodShipText}</span>
+                    </span>
+                  </label>
+                ) : (
+                  <label className="m-method is-off" aria-disabled="true">
+                    <input type="radio" name="metode" value="kirim" disabled checked={false} readOnly />
+                    <span>
+                      <strong>{COPY.methodShip}</strong>
+                      <span>{COPY.methodShipSoon}</span>
+                      <em>{COPY.methodShipOff}</em>
+                    </span>
+                  </label>
+                )}
+                <label className={`m-method${method === 'cf' ? ' is-on' : ''}`}>
                   <input type="radio" name="metode" value="cf" checked={method === 'cf'} onChange={() => setMethod('cf')} />
                   <span>
                     <strong>{COPY.methodCf}</strong>
@@ -329,7 +339,6 @@ export default function MerchApp({ products: initialProducts, status }) {
                 </label>
               </div>
 
-              {/* Kept for when SHIPPING_ENABLED flips on; the radio above is what unlocks it. */}
               {SHIPPING_ENABLED && method === 'kirim' && (
                 <div className="m-fields m-ship">
                   <div className="m-wide">
@@ -358,7 +367,7 @@ export default function MerchApp({ products: initialProducts, status }) {
             </SectionBox>
           </div>
 
-          <Summary priced={priced} canReview={canReview} onReview={openReview} adminWa={ADMIN_WA} />
+          <Summary priced={priced} method={method} canReview={canReview} onReview={openReview} adminWa={ADMIN_WA} />
         </form>
       )}
 

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { COPY } from '@/lib/merch-copy';
 import { rp, lineLabel } from '@/lib/po-core';
 
-export default function Summary({ priced, canReview, onReview, adminWa }) {
+export default function Summary({ priced, method, canReview, onReview, adminWa }) {
   const [open, setOpen] = useState(false);
   const { lines, totalQty, subtotal, hemat } = priced;
 
@@ -60,7 +60,7 @@ export default function Summary({ priced, canReview, onReview, adminWa }) {
             </div>
             <div>
               <dt>{COPY.sumShipping}</dt>
-              <dd>Rp0</dd>
+              <dd>{method === 'kirim' ? COPY.sumShippingShip : 'Rp0'}</dd>
             </div>
             <div className="m-sum-total">
               <dt>{COPY.sumTotal}</dt>
@@ -86,7 +86,7 @@ export default function Summary({ priced, canReview, onReview, adminWa }) {
           <path d="M12 8h.01" />
         </svg>
         <p>
-          {COPY.sumInfo}
+          {method === 'kirim' ? COPY.sumInfoShip : COPY.sumInfo}
           {adminWa && (
             <>
               {' '}

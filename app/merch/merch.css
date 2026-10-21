@@ -156,7 +156,8 @@
 .m-method > span { display: flex; flex-direction: column; gap: 4px; }
 .m-method strong { font-size: 17px; }
 .m-method > span > span { font-size: 14px; color: var(--soft); }
-.m-method.is-on { border-color: var(--lav); box-shadow: 0 0 0 1px var(--lav); cursor: pointer; }
+.m-method:not(.is-off) { cursor: pointer; }
+.m-method.is-on { border-color: var(--lav); box-shadow: 0 0 0 1px var(--lav); }
 .m-method.is-off { opacity: 0.55; cursor: not-allowed; }
 .m-method em { align-self: flex-start; margin-top: 4px; padding: 3px 8px; border: 1px dashed var(--soft); border-radius: var(--r); font-family: var(--mono); font-size: 11px; font-style: normal; color: var(--soft); }
 

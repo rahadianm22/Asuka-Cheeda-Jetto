@@ -128,7 +128,7 @@ export default function ReviewDialog({ priced, contact, method, address, onClose
           </div>
         </dl>
 
-        <p className="m-dialog-pay">{COPY.rvPayNote}</p>
+        <p className="m-dialog-pay">{method === 'kirim' ? COPY.rvPayNoteShip : COPY.rvPayNote}</p>
         {error && (
           <p className="m-dialog-error" role="alert">
             {error}
