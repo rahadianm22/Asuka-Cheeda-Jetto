@@ -954,3 +954,42 @@ html:not(.hydrated) .mark-line path { stroke-dasharray: none; stroke-dashoffset:
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
 }
+
+/* ---------- merch banner: the whole picture is the button ---------- */
+.merch-banner {
+  position: relative; display: block; overflow: hidden; border: 1px solid var(--line); border-radius: var(--r);
+  background: var(--chassis-2); text-decoration: none;
+}
+.merch-banner picture, .merch-banner img { display: block; width: 100%; height: auto; }
+.merch-banner img { aspect-ratio: 3 / 1; object-fit: cover; transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease; }
+/* A dim layer with a pill label; both fade in while the banner is hovered or focused. */
+.merch-banner-cta {
+  /* The pill sits where the picture itself says "PRE-ORDER NOW", so it replaces that line instead of covering the title. */
+  position: absolute; inset: 0; display: flex; align-items: flex-start; justify-content: center; padding-top: calc(21.7% - 23px);
+  background: radial-gradient(ellipse at center, rgba(12, 8, 18, 0.55) 0%, rgba(12, 8, 18, 0.2) 75%);
+  opacity: 0; transition: opacity 0.4s ease;
+}
+.merch-banner-pill {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-width: 37%; padding: 13px 22px; border-radius: var(--r);
+  background: var(--lav); color: var(--ink); box-shadow: 4px 4px 0 var(--lav-hi);
+  font-family: var(--mono); font-size: clamp(12px, 1.5vw, 16px); font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+  transform: translateY(8px); transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.merch-banner:focus-visible { outline: 2px solid var(--lav-hi); outline-offset: 3px; }
+@media (hover: hover) {
+  .merch-banner:hover img { transform: scale(1.04); filter: brightness(0.8); }
+  .merch-banner:hover .merch-banner-cta { opacity: 1; }
+  .merch-banner:hover .merch-banner-pill { transform: none; }
+}
+.merch-banner:focus-visible img { transform: scale(1.04); filter: brightness(0.8); }
+.merch-banner:focus-visible .merch-banner-cta { opacity: 1; }
+.merch-banner:focus-visible .merch-banner-pill { transform: none; }
+@media (max-width: 700px) {
+  .merch-banner img { aspect-ratio: 5 / 4; }
+  .merch-banner-cta { padding-top: calc(67.2% - 21px); }
+  .merch-banner-pill { min-width: 58%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .merch-banner img, .merch-banner-cta, .merch-banner-pill { transition: none; }
+  .merch-banner:hover img, .merch-banner:focus-visible img { transform: none; }
+}

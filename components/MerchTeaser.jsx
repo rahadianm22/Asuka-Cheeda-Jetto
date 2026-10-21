@@ -14,7 +14,8 @@ function BagIcon({ className }) {
   );
 }
 
-// Links to the CF23 pre-order form at /merch. Shares the room teaser's spacing and button.
+// Links to the CF23 pre-order form at /merch. The banner is the button: its own text says "pre-order now", and a
+// language-aware label fades in over it while it is hovered or focused.
 export default function MerchTeaser() {
   const { t } = useLang();
 
@@ -22,9 +23,17 @@ export default function MerchTeaser() {
     <section className="room-teaser">
       <SectionHead no="09" title={t('merchTitle')} sub={t('merchSub')} />
       <Reveal y={30}>
-        <Link href="/merch" className="cta room-teaser-cta">
-          <BagIcon className="cta-icon" />
-          {t('merchCta')}
+        <Link href="/merch" className="merch-banner">
+          <picture>
+            <source media="(max-width: 700px)" srcSet="/merch/banner-mobile.webp" width={1200} height={960} />
+            <img src="/merch/banner-desktop.webp" alt={t('merchBannerAlt')} width={2400} height={800} loading="lazy" decoding="async" />
+          </picture>
+          <span className="merch-banner-cta" aria-hidden="true">
+            <span className="merch-banner-pill">
+              <BagIcon className="cta-icon" />
+              {t('merchBannerCta')}
+            </span>
+          </span>
         </Link>
       </Reveal>
     </section>
