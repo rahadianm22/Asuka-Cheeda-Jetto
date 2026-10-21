@@ -10,6 +10,7 @@ import Preferences from '@/components/Preferences';
 import Feed from '@/components/Feed';
 import Vettalk from '@/components/Vettalk';
 import GamingRoom from '@/components/GamingRoom';
+import MerchTeaser from '@/components/MerchTeaser';
 import Footer from '@/components/Footer';
 import PawBurst from '@/components/PawBurst';
 import PawCursor from '@/components/PawCursor';
@@ -41,6 +42,7 @@ export default async function Home() {
           <SupportLinks />
           <SocialLinks />
           <GamingRoom />
+          <MerchTeaser />
         </main>
         <Footer />
       </div>

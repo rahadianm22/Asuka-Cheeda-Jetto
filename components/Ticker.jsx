@@ -57,9 +57,9 @@ function Band({ items, baseVelocity, className }) {
   );
 }
 
-export default function Ticker() {
+export default function Ticker({ items }) {
   const { t } = useLang();
-  const a = [t('tickerText'), t('tickerText2'), t('tickerText3')];
+  const a = items ?? [t('tickerText'), t('tickerText2'), t('tickerText3')];
 
   return (
     <div className="bands" aria-hidden="true">
