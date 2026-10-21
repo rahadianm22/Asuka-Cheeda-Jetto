@@ -2,7 +2,9 @@ import './merch.css';
 import TopBar from '@/components/TopBar';
 import Ticker from '@/components/Ticker';
 import Footer from '@/components/Footer';
+import { notFound } from 'next/navigation';
 import MerchApp from '@/components/Merch/MerchApp';
+import { merchEnabled } from '@/lib/merch-flag';
 import { getProducts } from '@/lib/products';
 import { getPOStatus } from '@/lib/po-config';
 import { COPY } from '@/lib/merch-copy';
@@ -16,6 +18,8 @@ export const metadata = {
 };
 
 export default async function MerchPage() {
+  if (!merchEnabled()) notFound();
+
   const products = await getProducts();
 
   return (
