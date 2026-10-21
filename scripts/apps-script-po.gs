@@ -11,7 +11,7 @@ var PESANAN = 'Pesanan';
 var TZ = 'Asia/Jakarta';
 
 var KATALOG_HEADER = ['SKU', 'Nama', 'Jenis', 'Harga PO', 'Harga OTS', 'Stok'];
-var PESANAN_HEADER = ['Waktu', 'No. PO', 'Nama', 'WhatsApp', 'Pesanan', 'Total item', 'Metode', 'Catatan', 'Total', 'Status'];
+var PESANAN_HEADER = ['Waktu', 'No. PO', 'Nama', 'WhatsApp', 'Pesanan', 'Total item', 'Metode', 'Catatan', 'Total', 'Status', 'Alamat', 'Kota', 'Provinsi', 'Kode Pos'];
 var SEED = [
   ['ASJ-B-GK-1', 'Jetto Wagging Tail Keychain', 'Gantungan Kunci', 65000, 70000, 20],
   ['ASJ-B-GK-2', 'Adopt Me 3D Clicker Keychain', 'Gantungan Kunci', 80000, 85000, 20],
@@ -24,7 +24,7 @@ var SEED = [
   ['ASJ-B-PC-2', 'Vet Jetto Photocard', 'Photocard', 20000, 25000, 50],
 ];
 
-/** Run once from the editor: creates the two tabs with headers and the starting stock. */
+/** Run from the editor: creates the two tabs, the starting stock (only if Katalog is empty) and the order headers. */
 function setup() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var kat = ss.getSheetByName(KATALOG) || ss.insertSheet(KATALOG);
@@ -34,11 +34,11 @@ function setup() {
     kat.setFrozenRows(1);
   }
   var pes = ss.getSheetByName(PESANAN) || ss.insertSheet(PESANAN);
-  if (pes.getLastRow() === 0) {
-    pes.getRange(1, 1, 1, PESANAN_HEADER.length).setValues([PESANAN_HEADER]).setFontWeight('bold');
-    pes.getRange('D:D').setNumberFormat('@'); // keep the WhatsApp number as text
-    pes.setFrozenRows(1);
-  }
+  // The header is rewritten on every run, so columns added in later versions (Alamat...) appear without touching orders.
+  pes.getRange(1, 1, 1, PESANAN_HEADER.length).setValues([PESANAN_HEADER]).setFontWeight('bold');
+  pes.getRange('D:D').setNumberFormat('@'); // keep the WhatsApp number as text
+  pes.getRange('N:N').setNumberFormat('@'); // and the postal code
+  pes.setFrozenRows(1);
 }
 
 function json_(obj) {
@@ -88,9 +88,14 @@ function doPost(e) {
     }).join('; ');
     var pes = ss.getSheetByName(PESANAN);
     var row = pes.getLastRow() + 1;
+    pes.getRange(row, 4).setNumberFormat('@');
+    pes.getRange(row, 14).setNumberFormat('@');
+    // New site versions send the plain note as catatanUser and the address as separate fields.
+    var note = order.catatanUser !== undefined ? order.catatanUser : order.catatan;
     pes.getRange(row, 1, 1, PESANAN_HEADER.length).setValues([[
       Utilities.formatDate(new Date(), TZ, 'yyyy-MM-dd HH:mm:ss'), noPO, order.nama, order.whatsapp, items,
-      order.totalQty, order.metode, order.catatan || '', order.total, 'Menunggu bayar di booth',
+      order.totalQty, order.metode, note || '', order.total, 'Menunggu pembayaran',
+      order.alamat || '', order.kota || '', order.provinsi || '', order.kodepos || '',
     ]]);
     return json_({ ok: true, noPO: noPO });
   } catch (err) {
