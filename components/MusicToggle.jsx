@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useLang } from './LanguageProvider';
+import { BGM_EVENT, KARAOKE_EVENT } from './Karaoke/KaraokePlayerProvider';
 
 const SRC = '/audio/jettobgm.mp3';
 const TITLE = 'Otsu Jetto';
@@ -16,6 +17,9 @@ function getBgm() {
     bgm.loop = true;
     bgm.volume = VOLUME;
     bgm.preload = 'none';
+    // The karaoke player and this background music never play over each other.
+    bgm.addEventListener('play', () => window.dispatchEvent(new Event(BGM_EVENT)));
+    window.addEventListener(KARAOKE_EVENT, () => bgm.pause());
   }
   return bgm;
 }

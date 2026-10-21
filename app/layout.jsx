@@ -1,5 +1,8 @@
 import './globals.css';
+import '@/components/Karaoke/karaoke.css';
 import { LanguageProvider } from '@/components/LanguageProvider';
+import { KaraokePlayerProvider } from '@/components/Karaoke/KaraokePlayerProvider';
+import KaraokeOverlays from '@/components/Karaoke/KaraokeOverlays';
 
 const description =
   'Semua tentang Asuka Cheeda Jetto, dokter hewan virtual: profil, cover lagu, VETTALK, dan semua akun resminya di satu halaman.';
@@ -43,7 +46,13 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        <LanguageProvider>{children}</LanguageProvider>
+        <LanguageProvider>
+          {/* One audio engine for the whole site: it keeps playing across sections and between pages. */}
+          <KaraokePlayerProvider>
+            {children}
+            <KaraokeOverlays />
+          </KaraokePlayerProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

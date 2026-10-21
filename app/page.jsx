@@ -43,6 +43,7 @@ export default async function Home() {
           <SocialLinks />
           <GamingRoom />
           <MerchTeaser />
+          {/* Karaoke room hidden for now; re-enable by restoring <KaraokeSection /> */}
         </main>
         <Footer />
       </div>
