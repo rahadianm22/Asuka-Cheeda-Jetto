@@ -185,18 +185,13 @@ export default function MerchApp({ products: initialProducts, status }) {
     }
   }
 
+  // Reloading starts a fresh form and pulls the current stock, which the order just placed has changed.
   function another() {
     try {
       window.sessionStorage.removeItem(STORAGE_KEY);
     } catch {}
-    setOrder(null);
-    setCart({});
-    setSizes({});
-    setFilter('Semua');
-    setForm(EMPTY_FORM);
-    setErrors({});
-    setStockMsg('');
     window.scrollTo({ top: 0 });
+    window.location.reload();
   }
 
   if (order) return <SuccessView order={order} onAnother={another} />;
