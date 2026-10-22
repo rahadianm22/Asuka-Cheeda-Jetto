@@ -437,3 +437,8 @@
 
 /* The name field fills the whole row, like the contact group under it, instead of sitting in half a column. */
 .m-fields > .m-field:first-child { grid-column: 1 / -1; }
+
+/* The site sets overflow-x: hidden on body, which also turns overflow-y into auto, so body becomes a scroll
+   container and position: sticky sticks to it instead of the viewport. "clip" still hides sideways overflow
+   but creates no scroll container, so the order summary can follow the scroll. Only pages with .merch get it. */
+body:has(.merch) { overflow-x: clip; }
