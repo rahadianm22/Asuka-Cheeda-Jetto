@@ -16,7 +16,8 @@
 var TAB = 'Asuka Cheeda Jetto';
 var TZ = 'Asia/Jakarta';
 var ORDER_TITLE = 'PESANAN PO CF23 · diisi otomatis oleh website asukajetto.my.id (jangan diubah selain kolom Status)';
-var ORDER_HEADER = ['Waktu', 'No. PO', 'Nama', 'WhatsApp', 'Pesanan', 'Total item', 'Metode', 'Alamat', 'Kota', 'Provinsi', 'Kode Pos', 'Catatan', 'Total', 'Status', 'Email', 'Media Sosial'];
+var ORDER_HEADER = ['Waktu', 'No. PO', 'Nama', 'WhatsApp', 'Email', 'Media Sosial', 'Pesanan', 'Total item', 'Metode', 'Alamat', 'Kota', 'Provinsi', 'Kode Pos', 'Catatan', 'Total', 'Status'];
+var COL_WA = 4, COL_ZIP = 13; // columns kept as text so leading zeros survive
 var FIRST_STATUS = 'Menunggu pembayaran';
 
 function sheet_() {
@@ -85,8 +86,8 @@ function setup() {
   if (!orderHeaderRow_(sh)) {
     sh.getRange(19, 1).setValue(ORDER_TITLE).setFontWeight('bold');
     sh.getRange(20, 1, 1, ORDER_HEADER.length).setValues([ORDER_HEADER]).setFontWeight('bold').setBackground('#9b69c7').setFontColor('#ffffff');
-    sh.getRange(21, 4, sh.getMaxRows() - 20, 1).setNumberFormat('@');
-    sh.getRange(21, 11, sh.getMaxRows() - 20, 1).setNumberFormat('@');
+    sh.getRange(21, COL_WA, sh.getMaxRows() - 20, 1).setNumberFormat('@');
+    sh.getRange(21, COL_ZIP, sh.getMaxRows() - 20, 1).setNumberFormat('@');
   }
 }
 
@@ -170,12 +171,12 @@ function doPost(e) {
       return l.name + (l.ukuran ? ' (' + l.ukuran + ')' : '') + ' x' + l.qty;
     }).join('; ');
     var note = order.catatanUser !== undefined ? order.catatanUser : order.catatan;
-    sh.getRange(nextRow, 4).setNumberFormat('@');
-    sh.getRange(nextRow, 11).setNumberFormat('@');
+    sh.getRange(nextRow, COL_WA).setNumberFormat('@');
+    sh.getRange(nextRow, COL_ZIP).setNumberFormat('@');
     sh.getRange(nextRow, 1, 1, ORDER_HEADER.length).setValues([[
-      Utilities.formatDate(new Date(), TZ, 'yyyy-MM-dd HH:mm:ss'), noPO, order.nama, order.whatsapp, items,
-      order.totalQty, order.metode, order.alamat || '', order.kota || '', order.provinsi || '', order.kodepos || '',
-      note || '', order.total, FIRST_STATUS, order.email || '', order.sosmed || '',
+      Utilities.formatDate(new Date(), TZ, 'yyyy-MM-dd HH:mm:ss'), noPO, order.nama, order.whatsapp || '', order.email || '', order.sosmed || '',
+      items, order.totalQty, order.metode, order.alamat || '', order.kota || '', order.provinsi || '', order.kodepos || '',
+      note || '', order.total, FIRST_STATUS,
     ]]);
     return json_({ ok: true, noPO: noPO });
   } catch (err) {
