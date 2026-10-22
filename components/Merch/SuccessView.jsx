@@ -198,7 +198,7 @@ export default function SuccessView({ order, onAnother }) {
                     </div>
                     <div>
                       <dt>Ongkir</dt>
-                      <dd>{shipped ? 'menyusul via WA' : 'Rp0'}</dd>
+                      <dd>{shipped ? 'menyusul via kontakmu' : 'Rp0'}</dd>
                     </div>
                   </dl>
                   <div className="m-ticket-pay">
@@ -358,7 +358,7 @@ export default function SuccessView({ order, onAnother }) {
               </div>
               <div>
                 <dt>Ongkir</dt>
-                <dd>{shipped ? 'menyusul via WA' : 'Rp0'}</dd>
+                <dd>{shipped ? 'menyusul via kontakmu' : 'Rp0'}</dd>
               </div>
               <div>
                 <dt>Status bayar</dt>
