@@ -2,13 +2,14 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { COPY, fmt } from '@/lib/merch-copy';
-import { EVENT, ADMIN_WA, SHIPPING_ENABLED } from '@/lib/po-config';
+import { EVENT, ADMIN_WA, SHIPPING_ENABLED, PO_CLOSE_AT } from '@/lib/po-config';
 import { TYPES } from '@/lib/products';
 import { lineKey, priceLines, validateContact, validateAddress, unitsFree, withBundleStock } from '@/lib/po-core';
 import ProductCard from './ProductCard';
 import Summary from './Summary';
 import ReviewDialog from './ReviewDialog';
 import SuccessView from './SuccessView';
+import Countdown from './Countdown';
 
 const STORAGE_KEY = 'jetto-po-order';
 
@@ -255,6 +256,14 @@ export default function MerchApp({ products: initialProducts, status }) {
             <dt>{COPY.closeLabel}</dt>
             <dd>{EVENT.poCloseLabel}</dd>
           </div>
+          {open && (
+            <div className="m-wide m-cd-cell">
+              <dt>{COPY.cdLabel}</dt>
+              <dd>
+                <Countdown closeAt={PO_CLOSE_AT} />
+              </dd>
+            </div>
+          )}
           <div className="m-wide">
             <dt>{COPY.pickupLabel}</dt>
             <dd>{COPY.pickupValue}</dd>

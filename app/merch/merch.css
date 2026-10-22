@@ -442,3 +442,11 @@
    container and position: sticky sticks to it instead of the viewport. "clip" still hides sideways overflow
    but creates no scroll container, so the order summary can follow the scroll. Only pages with .merch get it. */
 body:has(.merch) { overflow-x: clip; }
+
+/* ---------- countdown to the PO close ---------- */
+.m-hero-facts .m-cd-cell dd { display: block; }
+.m-cd { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 6px; }
+.m-cd-unit { background: var(--chassis); border: 1px solid var(--line); border-radius: var(--r); padding: 8px 4px 7px; text-align: center; }
+.m-cd-unit strong { display: block; font-size: clamp(20px, 3.2vw, 26px); line-height: 1.1; color: var(--lav-hi); font-variant-numeric: tabular-nums; }
+.m-cd-unit span { display: block; margin-top: 3px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--soft); }
+.m-cd-done { color: var(--warn-tx); font-size: 14px; font-weight: 700; }
