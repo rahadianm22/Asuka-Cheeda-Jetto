@@ -425,3 +425,15 @@
 @media (hover: none) and (prefers-reduced-motion: reduce) {
   .m-stage-img:has(+ .m-stage-alt) { animation: none; }
 }
+
+/* ---------- contact group: any one of WhatsApp / email / social is enough ---------- */
+.m-contact { border: 1px dashed rgba(193, 161, 207, 0.35); border-radius: var(--r); padding: 16px 18px 18px; min-width: 0; }
+.m-contact legend { padding: 0 8px; font-size: 14px; font-weight: 700; color: var(--lav-hi); }
+.m-contact-hint { margin: 0 0 14px; font-size: 13px; color: var(--soft); }
+.m-contact-hint.is-error { color: var(--warn-tx); font-weight: 600; }
+.m-contact-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.m-opt-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.m-opt-head span { font-size: 12px; color: var(--soft); white-space: nowrap; }
+
+/* The name field fills the whole row, like the contact group under it, instead of sitting in half a column. */
+.m-fields > .m-field:first-child { grid-column: 1 / -1; }

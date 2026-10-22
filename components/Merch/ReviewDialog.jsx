@@ -92,9 +92,11 @@ export default function ReviewDialog({ priced, contact, method, address, onClose
             <dt>{COPY.rvName}</dt>
             <dd>{contact.nama}</dd>
           </div>
-          <div>
-            <dt>{COPY.rvWa}</dt>
-            <dd className="m-mono-md">{contact.whatsapp}</dd>
+          <div className="m-wide">
+            <dt>{COPY.rvContact}</dt>
+            {contact.whatsapp && <dd className="m-mono-md">{COPY.rvWa}: +{contact.whatsapp}</dd>}
+            {contact.email && <dd>{COPY.rvMail}: {contact.email}</dd>}
+            {contact.sosmed && <dd>{COPY.rvSos}: {contact.sosmed}</dd>}
           </div>
           <div className="m-wide">
             <dt>{COPY.rvPickup}</dt>

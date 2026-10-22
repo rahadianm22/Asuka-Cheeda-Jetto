@@ -12,7 +12,7 @@ import SuccessView from './SuccessView';
 
 const STORAGE_KEY = 'jetto-po-order';
 
-const EMPTY_FORM = { nama: '', whatsapp: '', catatan: '', alamat: '', kota: '', provinsi: '', kodepos: '', website: '' };
+const EMPTY_FORM = { nama: '', whatsapp: '', email: '', sosmed: '', catatan: '', alamat: '', kota: '', provinsi: '', kodepos: '', website: '' };
 
 function Field({ id, label, error, hint, children }) {
   return (
@@ -22,6 +22,24 @@ function Field({ id, label, error, hint, children }) {
       </label>
       {children}
       {hint && !error && <span className="m-hint" id={`${id}-hint`}>{hint}</span>}
+      {error && (
+        <span className="m-error" id={`${id}-err`} role="alert">
+          {error}
+        </span>
+      )}
+    </div>
+  );
+}
+
+// A contact input: the label sits beside a "Pilihan n" tag, and none of the three is required on its own.
+function OptField({ id, label, opt, error, children }) {
+  return (
+    <div className="m-field">
+      <div className="m-opt-head">
+        <label htmlFor={id}>{label}</label>
+        <span>{opt}</span>
+      </div>
+      {children}
       {error && (
         <span className="m-error" id={`${id}-err`} role="alert">
           {error}
@@ -104,12 +122,12 @@ export default function MerchApp({ products: initialProducts, status }) {
     const address = method === 'kirim' ? validateAddress(form) : { errors: {} };
     const found = { ...contact.errors, ...address.errors };
     setErrors(found);
-    const first = ['nama', 'whatsapp', 'alamat', 'kota', 'provinsi', 'kodepos'].find((k) => found[k]);
+    const first = ['nama', 'whatsapp', 'email', 'sosmed', 'kontak', 'alamat', 'kota', 'provinsi', 'kodepos'].find((k) => found[k]);
     if (first) {
-      document.getElementById(`m-${first}`)?.focus();
+      document.getElementById(first === 'kontak' ? 'm-whatsapp' : `m-${first}`)?.focus();
       return null;
     }
-    return { nama: contact.nama, whatsapp: contact.whatsapp };
+    return { nama: contact.nama, whatsapp: contact.whatsapp, email: contact.email, sosmed: contact.sosmed };
   }
 
   const [contact, setContact] = useState(null);
@@ -135,6 +153,8 @@ export default function MerchApp({ products: initialProducts, status }) {
         body: JSON.stringify({
           nama: contact.nama,
           whatsapp: contact.whatsapp,
+          email: contact.email,
+          sosmed: contact.sosmed,
           catatan: contact.catatan,
           metode: method,
           ...(method === 'kirim' && { alamat: form.alamat, kota: form.kota, provinsi: form.provinsi, kodepos: form.kodepos }),
@@ -296,19 +316,23 @@ export default function MerchApp({ products: initialProducts, status }) {
                     aria-describedby={errors.nama ? 'm-nama-err' : undefined}
                   />
                 </Field>
-                <Field id="m-whatsapp" label={COPY.fWa} error={errors.whatsapp} hint={COPY.fWaHint}>
-                  <input
-                    id="m-whatsapp"
-                    type="tel"
-                    inputMode="tel"
-                    autoComplete="tel"
-                    placeholder={COPY.fWaPh}
-                    value={form.whatsapp}
-                    onChange={set('whatsapp')}
-                    aria-invalid={!!errors.whatsapp}
-                    aria-describedby={errors.whatsapp ? 'm-whatsapp-err' : 'm-whatsapp-hint'}
-                  />
-                </Field>
+                <fieldset className="m-contact m-wide" aria-describedby="m-contact-hint">
+                  <legend>{COPY.fContactTitle}</legend>
+                  <p id="m-contact-hint" className={errors.kontak ? 'm-contact-hint is-error' : 'm-contact-hint'} role={errors.kontak ? 'alert' : undefined}>
+                    {errors.kontak || COPY.fContactHint}
+                  </p>
+                  <div className="m-contact-grid">
+                    <OptField id="m-whatsapp" label={COPY.fWa} opt={COPY.fWaOpt} error={errors.whatsapp}>
+                      <input id="m-whatsapp" type="tel" inputMode="tel" autoComplete="tel" placeholder={COPY.fWaPh} value={form.whatsapp} onChange={set('whatsapp')} aria-invalid={!!errors.whatsapp || !!errors.kontak} aria-describedby={errors.whatsapp ? 'm-whatsapp-err' : undefined} />
+                    </OptField>
+                    <OptField id="m-email" label={COPY.fMail} opt={COPY.fMailOpt} error={errors.email}>
+                      <input id="m-email" type="email" inputMode="email" autoComplete="email" placeholder={COPY.fMailPh} value={form.email} onChange={set('email')} aria-invalid={!!errors.email || !!errors.kontak} aria-describedby={errors.email ? 'm-email-err' : undefined} />
+                    </OptField>
+                    <OptField id="m-sosmed" label={COPY.fSos} opt={COPY.fSosOpt} error={errors.sosmed}>
+                      <input id="m-sosmed" type="text" autoComplete="off" placeholder={COPY.fSosPh} value={form.sosmed} onChange={set('sosmed')} aria-invalid={!!errors.sosmed || !!errors.kontak} aria-describedby={errors.sosmed ? 'm-sosmed-err' : undefined} />
+                    </OptField>
+                  </div>
+                </fieldset>
                 {/* Honeypot: real visitors never see or fill this. */}
                 <div className="m-honey" aria-hidden="true">
                   <label htmlFor="m-website">Website</label>

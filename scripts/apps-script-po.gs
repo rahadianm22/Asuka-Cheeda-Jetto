@@ -16,7 +16,7 @@
 var TAB = 'Asuka Cheeda Jetto';
 var TZ = 'Asia/Jakarta';
 var ORDER_TITLE = 'PESANAN PO CF23 · diisi otomatis oleh website asukajetto.my.id (jangan diubah selain kolom Status)';
-var ORDER_HEADER = ['Waktu', 'No. PO', 'Nama', 'WhatsApp', 'Pesanan', 'Total item', 'Metode', 'Alamat', 'Kota', 'Provinsi', 'Kode Pos', 'Catatan', 'Total', 'Status'];
+var ORDER_HEADER = ['Waktu', 'No. PO', 'Nama', 'WhatsApp', 'Pesanan', 'Total item', 'Metode', 'Alamat', 'Kota', 'Provinsi', 'Kode Pos', 'Catatan', 'Total', 'Status', 'Email', 'Media Sosial'];
 var FIRST_STATUS = 'Menunggu pembayaran';
 
 function sheet_() {
@@ -175,7 +175,7 @@ function doPost(e) {
     sh.getRange(nextRow, 1, 1, ORDER_HEADER.length).setValues([[
       Utilities.formatDate(new Date(), TZ, 'yyyy-MM-dd HH:mm:ss'), noPO, order.nama, order.whatsapp, items,
       order.totalQty, order.metode, order.alamat || '', order.kota || '', order.provinsi || '', order.kodepos || '',
-      note || '', order.total, FIRST_STATUS,
+      note || '', order.total, FIRST_STATUS, order.email || '', order.sosmed || '',
     ]]);
     return json_({ ok: true, noPO: noPO });
   } catch (err) {

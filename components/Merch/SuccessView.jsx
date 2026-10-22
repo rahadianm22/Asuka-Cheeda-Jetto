@@ -65,6 +65,10 @@ function saveCalendar(order) {
   downloadBlob(new Blob([ics], { type: 'text/calendar;charset=utf-8' }), `${order.noPO}-cf23.ics`);
 }
 
+// How the admin will reach the buyer, from whichever contact they filled in.
+const contactLine = (o) =>
+  [o.whatsapp && `WhatsApp +${o.whatsapp}`, o.email && `email ${o.email}`, o.sosmed && o.sosmed].filter(Boolean).join(' · ');
+
 export default function SuccessView({ order, onAnother }) {
   const ticketRef = useRef(null);
   const titleRef = useRef(null);
@@ -114,11 +118,11 @@ export default function SuccessView({ order, onAnother }) {
   const steps = shipped
     ? [
         ['Admin cek ongkir', ' ke alamat yang kamu isi.'],
-        ['Kamu dikabarin lewat WhatsApp', ' soal total + ongkir dan cara bayarnya. Pastikan nomornya aktif, ya.'],
+        ['Kamu dikabarin lewat kontakmu', ' soal total + ongkir dan cara bayarnya. Pastikan kontak yang kamu isi bisa dihubungi, ya.'],
         ['Bayar sesuai arahan admin', ', terus merch dikirim ke alamatmu. Pat pat~'],
       ]
     : [
-        ['Kamu dikabarin lewat WhatsApp', ' soal total dan cara bayarnya. Pastikan nomornya aktif, ya.'],
+        ['Kamu dikabarin lewat kontakmu', ' soal total dan cara bayarnya. Pastikan kontak yang kamu isi bisa dihubungi, ya.'],
         ['Bayar sesuai arahan admin', ', biar pesananmu terkonfirmasi.'],
         ['Datang ke booth Jetto', ` di CF23 antara jam ${EVENT.hoursLabel.replace(' – ', ' dan ').replace(' WIB', '')} WIB, tunjukin tiket PO (nomor PO + nama) ke kasir. Merch langsung dibawa pulang. Pat pat~`],
       ];
@@ -151,8 +155,8 @@ export default function SuccessView({ order, onAnother }) {
             </h1>
             <span>
               {shipped
-                ? 'Merch kamu udah dicatat & disisihin. Admin bakal cek ongkir ke alamatmu, lalu kabarin total + ongkir dan cara bayarnya lewat WhatsApp. Harga PO tetap berlaku.'
-                : 'Merch kamu udah dicatat & disisihin. Admin bakal kabarin total dan cara bayarnya lewat WhatsApp, abis itu tinggal ambil di booth CF23. Harga PO tetap berlaku.'}
+                ? 'Merch kamu udah dicatat & disisihin. Admin bakal cek ongkir ke alamatmu, lalu kabarin total + ongkir dan cara bayarnya lewat kontak yang kamu isi. Harga PO tetap berlaku.'
+                : 'Merch kamu udah dicatat & disisihin. Admin bakal kabarin total dan cara bayarnya lewat kontak yang kamu isi, abis itu tinggal ambil di booth CF23. Harga PO tetap berlaku.'}
             </span>
           </div>
 
@@ -241,7 +245,7 @@ export default function SuccessView({ order, onAnother }) {
                   ? [
                       ['Pengambilan', 'Dikirim ke alamat'],
                       ['Ongkir', 'Dicek admin'],
-                      ['Kabar via', `WhatsApp ${order.whatsapp ? '+' + order.whatsapp : ''}`.trim()],
+                      ['Kabar via', contactLine(order) || '—'],
                       ['Status', 'Menunggu admin'],
                     ]
                   : [
@@ -279,7 +283,7 @@ export default function SuccessView({ order, onAnother }) {
             </svg>
             {shipped ? (
               <p>
-                <strong>Pastikan WhatsApp-mu aktif.</strong> Pesanan baru diproses setelah admin kabarin ongkir dan kamu konfirmasi. Salah alamat? Kabarin admin secepatnya.
+                <strong>Pastikan kontak yang kamu isi bisa dihubungi.</strong> Pesanan baru diproses setelah admin kabarin ongkir dan kamu konfirmasi. Salah alamat? Kabarin admin secepatnya.
               </p>
             ) : (
               <p>
