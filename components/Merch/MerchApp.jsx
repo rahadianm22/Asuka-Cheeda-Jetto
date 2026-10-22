@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { COPY, fmt } from '@/lib/merch-copy';
 import { EVENT, ADMIN_WA, SHIPPING_ENABLED } from '@/lib/po-config';
 import { TYPES } from '@/lib/products';
-import { lineKey, priceLines, validateContact, validateAddress } from '@/lib/po-core';
+import { lineKey, priceLines, validateContact, validateAddress, unitsFree, withBundleStock } from '@/lib/po-core';
 import ProductCard from './ProductCard';
 import Summary from './Summary';
 import ReviewDialog from './ReviewDialog';
@@ -80,14 +80,19 @@ export default function MerchApp({ products: initialProducts, status }) {
   );
   const priced = useMemo(() => priceLines(items, products), [items, products]);
   const canReview = priced.totalQty > 0;
+  // How many units of each product-and-size still fit, counting what the rest of the cart takes from shared piles.
+  const free = useMemo(
+    () => Object.fromEntries(products.flatMap((p) => (p.sizes || [null]).map((sz) => [lineKey(p.sku, sz), unitsFree(p, sz, items, products)]))),
+    [products, items],
+  );
 
   const set = (name) => (e) => setForm((f) => ({ ...f, [name]: e.target.value }));
 
   function changeQty(p, size, delta) {
     setStockMsg('');
     setCart((c) => {
-      const used = (p.sizes || [null]).reduce((n, s) => n + (c[lineKey(p.sku, s)] || 0), 0);
-      if (delta > 0 && used >= p.stock) return c;
+      const lines = products.flatMap((x) => (x.sizes || [null]).map((s) => ({ sku: x.sku, ukuran: s, qty: c[lineKey(x.sku, s)] || 0 })));
+      if (delta > 0 && (c[lineKey(p.sku, size)] || 0) >= unitsFree(p, size, lines, products)) return c;
       const key = lineKey(p.sku, size);
       const next = Math.max(0, (c[key] || 0) + delta);
       return { ...c, [key]: next };
@@ -150,20 +155,21 @@ export default function MerchApp({ products: initialProducts, status }) {
         const p = products.find((x) => x.sku === data.sku);
         setReviewing(false);
         if (p) {
-          setStockMsg(fmt(COPY.stockChanged, { name: p.name, n: data.tersisa }));
-          setProducts((list) => list.map((x) => (x.sku === p.sku ? { ...x, stock: data.tersisa } : x)));
+          setStockMsg(fmt(COPY.stockChanged, { name: data.ukuran ? `${p.name} (${data.ukuran})` : p.name, n: data.tersisa }));
+          // Refresh the short pile (it may sit inside a bundle); bundle stock is derived from its pieces.
+          const [pileSku, pileSize] = String(data.piece || p.sku).split('|');
+          setProducts((list) =>
+            withBundleStock(
+              list.map((x) => {
+                if (x.sku !== pileSku) return x;
+                return pileSize ? { ...x, sizeStock: { ...x.sizeStock, [pileSize]: data.pieceLeft } } : { ...x, stock: data.pieceLeft ?? data.tersisa };
+              }),
+            ),
+          );
+          // Trim the line that is too big so the cart fits what is left.
           setCart((c) => {
-            // Trim this SKU's quantities (last size first) so the cart fits what is left.
-            const next = { ...c };
-            let over = (p.sizes || [null]).reduce((n, s) => n + (next[lineKey(p.sku, s)] || 0), 0) - data.tersisa;
-            for (const s of [...(p.sizes || [null])].reverse()) {
-              if (over <= 0) break;
-              const k = lineKey(p.sku, s);
-              const cut = Math.min(next[k] || 0, over);
-              next[k] = (next[k] || 0) - cut;
-              over -= cut;
-            }
-            return next;
+            const k = lineKey(p.sku, data.ukuran || null);
+            return { ...c, [k]: Math.min(c[k] || 0, data.tersisa) };
           });
           document.getElementById('m-pick')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -267,6 +273,7 @@ export default function MerchApp({ products: initialProducts, status }) {
                     key={p.sku}
                     p={p}
                     cart={cart}
+                    free={free}
                     size={sizes[p.sku]}
                     onSize={(sku, s) => setSizes((z) => ({ ...z, [sku]: s }))}
                     onChange={changeQty}

@@ -30,17 +30,23 @@ function OtsHint() {
   );
 }
 
-export default function ProductCard({ p, cart, size, onSize, onChange }) {
+export default function ProductCard({ p, cart, free = {}, size, onSize, onChange }) {
   const sizes = p.sizes || null;
-  const activeSize = sizes ? size || sizes[0] : null;
+  // Default to the first size that is still in stock, so a sold-out M does not hide the other sizes.
+  const activeSize = sizes ? size || sizes.find((sz) => (p.sizeStock?.[sz] ?? 0) > 0) || sizes[0] : null;
   const qtyOf = (s) => cart[lineKey(p.sku, s)] || 0;
   const used = sizes ? sizes.reduce((n, s) => n + qtyOf(s), 0) : qtyOf(null);
   const qty = qtyOf(activeSize);
-  const left = p.stock - used;
-  const soldOut = p.stock <= 0;
-  const incOff = soldOut || used >= p.stock;
+  // `free` is how many units of this product-and-size can be in the cart, already counting what other lines take
+  // from shared piles (a bundle and a single item can share a shirt size).
+  const freeFor = (sz) => free[lineKey(p.sku, sz)] ?? (sz ? p.sizeStock?.[sz] : p.stock) ?? 0;
+  const left = freeFor(activeSize) - qty;
+  const soldOut = p.stock <= 0; // nothing left in any size
+  const incOff = soldOut || left <= 0;
 
-  const stock = getStockLabel(left, soldOut);
+  // For a sized product the line shows the chosen size; a size that is gone says so even when others are in stock.
+  const sizeGone = !!sizes && (p.sizeStock?.[activeSize] ?? 0) <= 0;
+  const stock = getStockLabel(left, soldOut || sizeGone);
 
   return (
     <article
@@ -95,6 +101,7 @@ export default function ProductCard({ p, cart, size, onSize, onChange }) {
                 key={s}
                 type="button"
                 aria-pressed={s === activeSize}
+                disabled={(p.sizeStock?.[s] ?? 0) <= 0 && qtyOf(s) === 0}
                 onClick={() => onSize(p.sku, s)}
               >
                 {qtyOf(s) ? `${s} · ${qtyOf(s)}` : s}

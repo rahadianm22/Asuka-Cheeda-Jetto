@@ -407,3 +407,21 @@
 }
 .m-price .m-ots-tip.is-open { opacity: 1; visibility: visible; transform: none; }
 @media (prefers-reduced-motion: reduce) { .m-price .m-ots-tip { transition: none; } }
+
+/* "Replace", not overlap: the photos are transparent cut-outs, so while the second one fades in the first one fades
+   out, otherwise the old picture shows through the new one. */
+@media (hover: hover) {
+  .m-card:not(.is-out):hover .m-stage-img:has(+ .m-stage-alt) { opacity: 0; }
+}
+.m-card:not(.is-out):has(:focus-visible) .m-stage-img:has(+ .m-stage-alt) { opacity: 0; }
+@keyframes m-lenti-base {
+  0%, 40% { opacity: 1; }
+  50%, 90% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@media (hover: none) {
+  .m-stage-img:has(+ .m-stage-alt) { animation: m-lenti-base 4s ease-in-out infinite; }
+}
+@media (hover: none) and (prefers-reduced-motion: reduce) {
+  .m-stage-img:has(+ .m-stage-alt) { animation: none; }
+}
