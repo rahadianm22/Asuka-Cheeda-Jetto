@@ -67,7 +67,7 @@ function SectionBox({ letter, title, tag, children }) {
   );
 }
 
-export default function MerchApp({ products: initialProducts, status }) {
+export default function MerchApp({ products: initialProducts, status, onTimeUp }) {
   const [products, setProducts] = useState(initialProducts);
   const [cart, setCart] = useState({});
   const [sizes, setSizes] = useState({});
@@ -260,7 +260,7 @@ export default function MerchApp({ products: initialProducts, status }) {
             <div className="m-wide m-cd-cell">
               <dt>{COPY.cdLabel}</dt>
               <dd>
-                <Countdown closeAt={PO_CLOSE_AT} />
+                <Countdown closeAt={PO_CLOSE_AT} onDone={onTimeUp} />
               </dd>
             </div>
           )}

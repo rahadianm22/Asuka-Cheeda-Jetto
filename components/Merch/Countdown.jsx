@@ -11,7 +11,7 @@ function split(ms) {
 }
 
 // Counts down to the PO close time. The server renders dashes so the first client paint matches, then it ticks every second.
-export default function Countdown({ closeAt }) {
+export default function Countdown({ closeAt, onDone }) {
   const target = new Date(closeAt).getTime();
   const [left, setLeft] = useState(null);
 
@@ -21,6 +21,11 @@ export default function Countdown({ closeAt }) {
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, [target]);
+
+  // Tell the page the moment the time runs out, so it can switch without a reload.
+  useEffect(() => {
+    if (left?.done) onDone?.();
+  }, [left?.done, onDone]);
 
   const units = [
     ['d', COPY.cdDays],
