@@ -10,8 +10,6 @@ import Preferences from '@/components/Preferences';
 import Feed from '@/components/Feed';
 import Vettalk from '@/components/Vettalk';
 import GamingRoom from '@/components/GamingRoom';
-import MerchTeaser from '@/components/MerchTeaser';
-import { merchEnabled } from '@/lib/merch-flag';
 import Footer from '@/components/Footer';
 import PawBurst from '@/components/PawBurst';
 import PawCursor from '@/components/PawCursor';
@@ -43,7 +41,7 @@ export default async function Home() {
           <SupportLinks />
           <SocialLinks />
           <GamingRoom />
-          {merchEnabled() && <MerchTeaser />}
+          {/* Merch CF23 section (No. 09) taken down after the PO; to bring it back, restore <MerchTeaser /> here. */}
           {/* Karaoke room hidden for now; re-enable by restoring <KaraokeSection /> */}
         </main>
         <Footer />
