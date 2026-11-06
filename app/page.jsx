@@ -10,6 +10,7 @@ import Preferences from '@/components/Preferences';
 import Feed from '@/components/Feed';
 import Vettalk from '@/components/Vettalk';
 import GamingRoom from '@/components/GamingRoom';
+import GalleryCF23 from '@/components/GalleryCF23';
 import Footer from '@/components/Footer';
 import PawBurst from '@/components/PawBurst';
 import PawCursor from '@/components/PawCursor';
@@ -41,7 +42,8 @@ export default async function Home() {
           <SupportLinks />
           <SocialLinks />
           <GamingRoom />
-          {/* Merch CF23 section (No. 09) taken down after the PO; to bring it back, restore <MerchTeaser /> here. */}
+          <GalleryCF23 />
+          {/* Merch CF23 teaser (formerly No. 09) taken down after the PO; to bring it back, restore <MerchTeaser /> here. */}
           {/* Karaoke room hidden for now; re-enable by restoring <KaraokeSection /> */}
         </main>
         <Footer />
